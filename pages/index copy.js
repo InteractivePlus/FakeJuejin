@@ -4,15 +4,16 @@ export default function Home() {
     const Nav = () => (
         <div>
             <div className="sticky top-0  w-full mx-auto bg-white border-b border-gray-200 flex-none">
-                <nav className="bg-white">
-                    <div className="max-w-6xl mx-auto px-4">
-                        <div className="flex justify-between">
-                            <div className="flex space-x-7">
-                                <div className="order-2 md:order-1">
+
+                <nav class="bg-white">
+                    <div class="max-w-6xl mx-auto px-4">
+                        <div class="flex justify-between">
+                            <div class="flex space-x-7">
+                                <div>
                                     {/* <!-- Website Logo --> */}
                                     <a
                                         href="#"
-                                        className="flex items-center py-4 px-2">
+                                        class="flex items-center py-4 px-2">
                                         <img
                                             className="w-auto h-6"
                                             src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/7abc2b532f725d394feaf0141547ade7.svg"
@@ -20,7 +21,7 @@ export default function Home() {
                                     </a>
                                 </div>
                                 {/* <!-- Primary Navbar items --> */}
-                                <div className="hidden md:flex items-center space-x-1 order-3">
+                                <div class="hidden md:flex items-center space-x-1">
                                     {/* <div className="flex-auto flex items-center ml-3"> */}
                                     <ul className="flex-grow flex text-juejinnav">
                                         <li className="flex-1 px-5">
@@ -37,12 +38,21 @@ export default function Home() {
                                     </ul>
                                     {/* </div> */}
                                 </div>
-
-                                {/* <!-- Mobile menu button --> */}
-                                <div className="md:hidden flex items-center order-1">
-                                    {/* <button className="outline-none mobile-menu-button">
+                            </div>
+                            {/* <!-- Secondary Navbar items --> */}
+                            <div class="hidden md:flex items-center space-x-3 ">
+                                <div className="rounded-full border-0 border-base-100 overflow-hidden w-10 h-10 ">
+                                    <img
+                                        className="w-full h-full"
+                                        src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
+                                    />
+                                </div>
+                            </div>
+                            {/* <!-- Mobile menu button --> */}
+                            <div class="md:hidden flex items-center">
+                                {/* <button class="outline-none mobile-menu-button">
                                 <svg
-                                    className=" w-6 h-6 text-gray-500 hover:text-green-500 "
+                                    class=" w-6 h-6 text-gray-500 hover:text-green-500 "
                                     x-show="!showMenu"
                                     fill="none"
                                     stroke-linecap="round"
@@ -53,57 +63,46 @@ export default function Home() {
                                     <path d="M4 6h16M4 12h16M4 18h16"></path>
                                 </svg>
                             </button> */}
-                                    <button className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
-                                        <svg
-                                            className="fill-current h-3 w-3"
-                                            viewBox="0 0 20 20"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <title>Menu</title>
-                                            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* <!-- Secondary Navbar items --> */}
-                            <div className="flex items-center justify-center space-x-3">
-                                <div className="rounded-full border-0 border-base-100 overflow-hidden w-10 h-10 ">
-                                    <img
-                                        className="w-full h-full"
-                                        src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
-                                    />
-                                </div>
+                                <button class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
+                                    <svg
+                                        class="fill-current h-3 w-3"
+                                        viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <title>Menu</title>
+                                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>
                     {/* <!-- mobile menu --> */}
-                    {/* <div className="hidden mobile-menu">
-                        <ul className="">
-                            <li className="active">
+                    {/* <div class="hidden mobile-menu">
+                        <ul class="">
+                            <li class="active">
                                 <a
                                     href="index.html"
-                                    className="block text-sm px-2 py-4 text-white bg-green-500 font-semibold">
+                                    class="block text-sm px-2 py-4 text-white bg-green-500 font-semibold">
                                     Home
                                 </a>
                             </li>
                             <li>
                                 <a
                                     href="#services"
-                                    className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">
+                                    class="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">
                                     Services
                                 </a>
                             </li>
                             <li>
                                 <a
                                     href="#about"
-                                    className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">
+                                    class="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">
                                     About
                                 </a>
                             </li>
                             <li>
                                 <a
                                     href="#contact"
-                                    className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">
+                                    class="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">
                                     Contact Us
                                 </a>
                             </li>
