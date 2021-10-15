@@ -2,11 +2,11 @@ import Head from "next/head";
 
 export default function Home() {
     const Nav = () => (
-        <div>
-            <div className="sticky top-0  w-full mx-auto bg-white border-b border-gray-200 flex-none">
-                <nav className="bg-white">
-                    <div className="max-w-6xl mx-auto px-4">
-                        <div className="flex justify-between">
+        <div className="mb-4">
+            <div className="sticky top-0  w-full mx-auto bg-white bg-opacity-100  flex-none">
+                <nav>
+                    <div className="max-w-6xl mx-auto">
+                        <div className="flex justify-between border-b border-gray-200 px-4">
                             <div className="flex space-x-7">
                                 <div className="order-2 md:order-1">
                                     {/* <!-- Website Logo --> */}
@@ -75,6 +75,21 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>
+
+                        <div className="flex overflow-x-auto border-b border-gray-200">
+                            <ul className="flex-row inline-flex text-juejinnav h-10 items-center pl-4">
+                                <li className="flex-1 px-4">
+                                    <a className="cursor-pointer">推荐</a>
+                                </li>
+
+                                <li className="flex-1 px-4">
+                                    <a className="cursor-pointer">后端</a>
+                                </li>
+                                <li className="flex-1 px-4">
+                                    <a className="cursor-pointer">前端</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     {/* <!-- mobile menu --> */}
                     {/* <div className="hidden mobile-menu">
@@ -111,18 +126,49 @@ export default function Home() {
                     </div> */}
                 </nav>
             </div>
-
-            <div className="flex-none"></div>
+        </div>
+    );
+    const JuejinList = () => (
+        <div className="bg-white">
+            {/* <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
+                <div>
+                    <div class="text-xl font-medium text-black">ChitChat</div>
+                    <p class="text-gray-500">You have a new message!</p>
+                </div>
+                <div class="flex-shrink-0">
+                    <img
+                        class="h-12 w-12"
+                        src="/img/logo.svg"
+                        alt="ChitChat Logo"
+                    />
+                </div>
+            </div> */}
+            <div className="flex border-b border-gray-200">
+                <ul className="flex-col inline-flex text-juejinnavpl-4">
+                    <li className="flex-1 px-4">
+                        <div className="flex flex-col border-b border-gray-200">
+                            <div className="flex flex-row">
+                                <div className=" px-4">作者</div>
+                                <div className="before:block before:bg-black before:w-1 px-4">
+                                    日期
+                                </div>
+                            </div>
+                            <div>标题</div>
+                            <div>文本</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     );
     return (
         <div className="overflow-hidden font-juejin">
             <Head>
-                <title>Create Next App</title>
+                <title>掘金</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-
             <Nav />
+            <JuejinList />
         </div>
     );
 }
