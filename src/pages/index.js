@@ -1,11 +1,12 @@
 import Head from "next/head";
 
+
 export default function Home() {
     const Nav = () => (
         <div className="mb-4">
             <div className="sticky top-0  w-full mx-auto bg-white bg-opacity-100  flex-none">
                 <nav>
-                    <div className="max-w-6xl mx-auto">
+                    <div className="mx-auto">
                         <div className="flex justify-between border-b border-gray-200 px-4">
                             <div className="flex space-x-7">
                                 <div className="order-2 md:order-1">
@@ -129,32 +130,50 @@ export default function Home() {
         </div>
     );
     const JuejinList = () => (
-        <div className="bg-white">
-            {/* <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
-                <div>
-                    <div class="text-xl font-medium text-black">ChitChat</div>
-                    <p class="text-gray-500">You have a new message!</p>
-                </div>
-                <div class="flex-shrink-0">
-                    <img
-                        class="h-12 w-12"
-                        src="/img/logo.svg"
-                        alt="ChitChat Logo"
-                    />
-                </div>
-            </div> */}
-            <div className="flex border-b border-gray-200">
-                <ul className="flex-col inline-flex text-juejinnavpl-4">
-                    <li className="flex-1 px-4">
+        <div className="flex justify-center">
+            <div className="flex bg-white max-w-4xl ">
+                <ul className="flex-col inline-flex leading-7">
+                    <li className="flex-1 px-6 pt-3">
                         <div className="flex flex-col border-b border-gray-200">
-                            <div className="flex flex-row">
-                                <div className=" px-4">作者</div>
-                                <div className="before:block before:bg-black before:w-1 px-4">
-                                    日期
-                                </div>
+                            <div className="flex flex-row items-center divide-x divide-gray-300 text-sm ">
+                                <div className="pr-4 text-gray-600">作者</div>
+                                <div className="px-4 text-gray-400">日期</div>
+                                <div className="px-4 text-gray-400">标签</div>
                             </div>
-                            <div>标题</div>
-                            <div>文本</div>
+                            <div className="flex flex-row mt-1 pb-3">
+                                <div className="flex flex-col">
+                                    <div className="text-gray-800 mb-1">
+                                        示例标题
+                                    </div>
+                                    <div className="text-gray-400 text-sm mb-4">
+                                        示例文本示例文本示例文本示例文本示例文本示例文本示例文本示例文本
+                                        示例文本示例文本示例文本
+                                    </div>
+
+                                    <ul className="flex flex-row text-sm">
+                                        <li className="flex flex-row mr-4">
+                                            <p className="iconfont icon-browse text-gray-400"></p>
+                                            <p className="ml-1 text-gray-600">
+                                                1234
+                                            </p>
+                                        </li>
+                                        <li className="flex flex-row mr-4">
+                                            <p className="iconfont icon-good text-gray-400"></p>
+                                            <p className="ml-1 text-gray-600">
+                                                1234
+                                            </p>
+                                        </li>
+                                        <li className="flex flex-row mr-4">
+                                            <p className="iconfont icon-comments text-gray-400"></p>
+                                            <p className="ml-1 text-gray-600">
+                                                1234
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <img className="ml-6 h-20" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bd2683efa3fa43deb13fb91c0cbd4b15~tplv-k3u1fbpfcp-no-mark:240:240:240:160.awebp" />
+                            </div>
                         </div>
                     </li>
                 </ul>
