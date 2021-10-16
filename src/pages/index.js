@@ -274,7 +274,7 @@ export default function Home() {
         };
 
         return (
-            <div className="flex justify-center">
+            <div className="flex justify-center mb-10 md:mb-0">
                 <div className="flex flex-col max-w-3xl w-full">
                     <div className="fixed bottom-0 md:sticky order-last md:order-first flex flex-1 py-4 px-6 border-b border-gray-200 w-full bg-white">
                         <div className="flex flex-1 flex-row items-center justify-around md:justify-start md:divide-x divide-gray-300 text-sm ">
