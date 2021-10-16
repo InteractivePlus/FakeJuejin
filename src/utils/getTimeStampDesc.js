@@ -33,7 +33,7 @@ export function getTimeStampDesc(timespan) {
         timeSpanStr = Math.round(milliseconds / span_in1hour) + "小时前";
     } else if (span_in1day < milliseconds && milliseconds <= span_in1month) {
         timeSpanStr = Math.round(milliseconds / span_in1day) + "天前";
-    } else if (milliseconds > span_in1month) {
+    } else {
         var tt = new Date(); //今天
         var ty = tt.getFullYear(); //今天年
         var tm = tt.getMonth() + 1; //今天月
@@ -41,9 +41,9 @@ export function getTimeStampDesc(timespan) {
         if (gm < 12) {
             timeSpanStr = String(gm) + "月前";
         } else {
-            timespan = Math.round(gm / 12) + "年前";
+            timeSpanStr = Math.round(gm / 12) + "年前";
         }
     }
-    
+
     return timeSpanStr;
 }
