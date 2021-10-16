@@ -12,11 +12,11 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-              // Build your palette here
-              transparent: 'transparent',
-              juejinbg: '#f4f5f5',
-              juejinnav: '#86909c',
-              juejinactive: '#1e80ff',
+                // Build your palette here
+                transparent: "transparent",
+                juejinbg: "#f4f5f5",
+                juejinnav: "#86909c",
+                juejinactive: "#1e80ff",
             },
         },
 

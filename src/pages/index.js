@@ -1,17 +1,70 @@
 import Head from "next/head";
-import { Fragment, useRef, useState, useEffect } from 'react';
+import { Fragment, useRef, useState, useEffect } from "react";
 
+import { getTimeStampDesc } from "../utils/getTimeStampDesc";
+
+const JuejinListItem = (props) => {
+    const { author, date, label, title, contentAbstract, coverImg } = props;
+
+    return (
+        <li className="flex-1 w-auto px-6 pt-3 ">
+            <div className="flex flex-1 flex-col border-b border-gray-200 w-auto">
+                <div className="flex flex-1 flex-row items-center divide-x divide-gray-300 text-sm ">
+                    <div className="pr-4 text-gray-600">{author}</div>
+                    <div className="px-4 text-gray-400">
+                        {getTimeStampDesc(date)}
+                    </div>
+                    <div className="px-4 text-gray-400">标签</div>
+                </div>
+                <div className="flex flex-1 flex-row mt-1 pb-3 items-center">
+                    <div className="flex flex-1 overflow-hidden">
+                        <div className="flex flex-1 flex-col w-full">
+                            <div className="mb-1 text-gray-800 truncate">
+                                {title}
+                            </div>
+                            <div className="mb-4 text-gray-400 text-sm truncate">
+                                {contentAbstract}
+                            </div>
+
+                            <ul className="flex flex-row text-sm">
+                                <li className="flex flex-row mr-4">
+                                    <p className="iconfont icon-browse text-gray-400"></p>
+                                    <p className="ml-0.5 text-gray-600">1234</p>
+                                </li>
+                                <li className="flex flex-row mr-4">
+                                    <p className="iconfont icon-good text-gray-400"></p>
+                                    <p className="ml-0.5 text-gray-600">1234</p>
+                                </li>
+                                <li className="flex flex-row mr-4">
+                                    <p className="iconfont icon-comments text-gray-400"></p>
+                                    <p className="ml-0.5 text-gray-600">1234</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="flex-none">
+                        <img
+                            className="ml-6 h-20"
+                            // src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bd2683efa3fa43deb13fb91c0cbd4b15~tplv-k3u1fbpfcp-no-mark:240:240:240:160.awebp"
+                            src={coverImg}
+                        />
+                    </div>
+                </div>
+            </div>
+        </li>
+    );
+};
 
 export default function Home() {
-
-
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdown = useRef(null);
 
     useEffect(() => {
         if (!showDropdown) return;
         function handleClick(event) {
-            (dropdown.current && !dropdown.current.contains(event.target)) && setShowDropdown(false)
+            dropdown.current &&
+                !dropdown.current.contains(event.target) &&
+                setShowDropdown(false);
             window.addEventListener("click", handleClick);
             return () => window.removeEventListener("click", handleClick);
         }
@@ -20,14 +73,10 @@ export default function Home() {
     const Menu = () => (
         <div className="overflow-y-auto absolute  top-px h-96 w-52 rounded-b-box bg-white text-juejinnav left-0">
             <ul className="flex flex-col">
-                <li>
-                    你爸
-                </li>
-
+                <li>你爸</li>
             </ul>
         </div>
-
-    )
+    );
 
     const Nav = () => (
         <div className="mb-4">
@@ -45,7 +94,10 @@ export default function Home() {
                                             className="w-auto h-6 md:block hidden"
                                             src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/7abc2b532f725d394feaf0141547ade7.svg"
                                         />
-                                        <img className="w-auto h-6 md:hidden" src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/6bdafd801c878b10edb5fed5d00969e9.svg" ></img>
+                                        <img
+                                            className="w-auto h-6 md:hidden"
+                                            src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/6bdafd801c878b10edb5fed5d00969e9.svg"
+                                        />
                                     </a>
                                 </div>
                                 {/* <!-- Primary Navbar items --> */}
@@ -68,28 +120,24 @@ export default function Home() {
                                 </div>
 
                                 {/* <!-- Mobile menu button --> */}
-                                <div onClick={() => setShowDropdown(b => !b)} className="md:hidden flex items-center order-2 cursor-pointer text-juejinactive">
-                                    {/* <button className="outline-none mobile-menu-button">
-                                <svg
-                                    className=" w-6 h-6 text-gray-500 hover:text-green-500 "
-                                    x-show="!showMenu"
-                                    fill="none"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path d="M4 6h16M4 12h16M4 18h16"></path>
-                                </svg>
-                            </button> */}
+                                <div
+                                    onClick={() => setShowDropdown((b) => !b)}
+                                    className="md:hidden flex items-center order-2 cursor-pointer text-juejinactive">
 
                                     <span>首页</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-5 w-5"
+                                        viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd"
+                                        />
                                     </svg>
 
                                     {showDropdown ? <Menu /> : null}
-
                                 </div>
                             </div>
 
@@ -158,53 +206,29 @@ export default function Home() {
     );
     const JuejinList = () => (
         <div className="flex justify-center">
-            <div className="flex bg-white max-w-4xl ">
-                <ul className="flex-col inline-flex leading-7">
-                    <li className="flex-1 px-6 pt-3">
-                        <div className="flex flex-col border-b border-gray-200">
-                            <div className="flex flex-row items-center divide-x divide-gray-300 text-sm ">
-                                <div className="pr-4 text-gray-600">作者</div>
-                                <div className="px-4 text-gray-400">日期</div>
-                                <div className="px-4 text-gray-400">标签</div>
-                            </div>
-                            <div className="flex flex-row mt-1 pb-3">
-                                <div className="flex flex-col">
-                                    <div className="text-gray-800 mb-1">
-                                        示例标题
-                                    </div>
-                                    <div className="text-gray-400 text-sm mb-4">
-                                        示例文本示例文本示例文本示例文本示例文本示例文本示例文本示例文本
-                                        示例文本示例文本示例文本
-                                    </div>
-
-                                    <ul className="flex flex-row text-sm">
-                                        <li className="flex flex-row mr-4">
-                                            <p className="iconfont icon-browse text-gray-400"></p>
-                                            <p className="ml-1 text-gray-600">
-                                                1234
-                                            </p>
-                                        </li>
-                                        <li className="flex flex-row mr-4">
-                                            <p className="iconfont icon-good text-gray-400"></p>
-                                            <p className="ml-1 text-gray-600">
-                                                1234
-                                            </p>
-                                        </li>
-                                        <li className="flex flex-row mr-4">
-                                            <p className="iconfont icon-comments text-gray-400"></p>
-                                            <p className="ml-1 text-gray-600">
-                                                1234
-                                            </p>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <img className="ml-6 h-20" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bd2683efa3fa43deb13fb91c0cbd4b15~tplv-k3u1fbpfcp-no-mark:240:240:240:160.awebp" />
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+            <ul className="flex flex-col leading-7 max-w-3xl w-full bg-white">
+                <JuejinListItem
+                    author="yck"
+                    date="1633923044"
+                    title="近 20 人爆肝数周，写给初中级前端的万字高级进阶指南"
+                    contentAbstract="🔥 这是什么？ 笔者在学会 JS 以及框架的应用后，有一段时间不知道该如何深入下去，活能干，就是不知道该学啥。相信这个问题也会有很多读者朋友遇到。 当然笔者目前已经突破了这个瓶颈，也成为了知名公司基础"
+                    coverImg="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/84f09255e03a473da6e38387c8dad825~tplv-k3u1fbpfcp-no-mark:240:240:240:160.awebp?"
+                />
+                <JuejinListItem
+                    author="朋友圈的小可爱"
+                    date="1626924865"
+                    title="【小知识】Android APP测试方法汇总"
+                    contentAbstract="前言 我们前期在Android 系统浅析中已经对 Android 统进行全面了解，所以在Android 系统我们通常接触到就是与用户交互层-应用层。 在Android 系统应用层在实际场景中表形式就是"
+                    coverImg="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bd2683efa3fa43deb13fb91c0cbd4b15~tplv-k3u1fbpfcp-no-mark:240:240:240:160.awebp"
+                />
+                <JuejinListItem
+                    author="朋友圈的小可爱"
+                    date="1626924865"
+                    title="【小知识】Android APP测试方法汇总"
+                    contentAbstract="前言 我们前期在Android 系统浅析中已经对 Androidaaaaaaaaaaaa"
+                    coverImg="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bd2683efa3fa43deb13fb91c0cbd4b15~tplv-k3u1fbpfcp-no-mark:240:240:240:160.awebp"
+                />
+            </ul>
         </div>
     );
     return (
