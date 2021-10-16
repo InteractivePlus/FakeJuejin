@@ -16,10 +16,7 @@ module.exports = {
               transparent: 'transparent',
               juejinbg: '#f4f5f5',
               juejinnav: '#86909c',
-              gray: colors.trueGray,
-              red: colors.red,
-              blue: colors.sky,
-              yellow: colors.amber,
+              juejinactive: '#1e80ff',
             },
         },
 

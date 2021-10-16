@@ -1,7 +1,34 @@
 import Head from "next/head";
+import { Fragment, useRef, useState, useEffect } from 'react';
 
 
 export default function Home() {
+
+
+    const [showDropdown, setShowDropdown] = useState(false);
+    const dropdown = useRef(null);
+
+    useEffect(() => {
+        if (!showDropdown) return;
+        function handleClick(event) {
+            (dropdown.current && !dropdown.current.contains(event.target)) && setShowDropdown(false)
+            window.addEventListener("click", handleClick);
+            return () => window.removeEventListener("click", handleClick);
+        }
+    }, [showDropdown]);
+
+    const Menu = () => (
+        <div className="overflow-y-auto absolute  top-px h-96 w-52 rounded-b-box bg-white text-juejinnav left-0">
+            <ul className="flex flex-col">
+                <li>
+                    你爸
+                </li>
+
+            </ul>
+        </div>
+
+    )
+
     const Nav = () => (
         <div className="mb-4">
             <div className="sticky top-0  w-full mx-auto bg-white bg-opacity-100  flex-none">
@@ -9,15 +36,16 @@ export default function Home() {
                     <div className="mx-auto">
                         <div className="flex justify-between border-b border-gray-200 px-4">
                             <div className="flex space-x-7">
-                                <div className="order-2 md:order-1">
+                                <div className="order-1">
                                     {/* <!-- Website Logo --> */}
                                     <a
                                         href="#"
                                         className="flex items-center py-4 px-2">
                                         <img
-                                            className="w-auto h-6"
+                                            className="w-auto h-6 md:block hidden"
                                             src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/7abc2b532f725d394feaf0141547ade7.svg"
                                         />
+                                        <img className="w-auto h-6 md:hidden" src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/6bdafd801c878b10edb5fed5d00969e9.svg" ></img>
                                     </a>
                                 </div>
                                 {/* <!-- Primary Navbar items --> */}
@@ -40,7 +68,7 @@ export default function Home() {
                                 </div>
 
                                 {/* <!-- Mobile menu button --> */}
-                                <div className="md:hidden flex items-center order-1">
+                                <div onClick={() => setShowDropdown(b => !b)} className="md:hidden flex items-center order-2 cursor-pointer text-juejinactive">
                                     {/* <button className="outline-none mobile-menu-button">
                                 <svg
                                     className=" w-6 h-6 text-gray-500 hover:text-green-500 "
@@ -54,15 +82,14 @@ export default function Home() {
                                     <path d="M4 6h16M4 12h16M4 18h16"></path>
                                 </svg>
                             </button> */}
-                                    <button className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
-                                        <svg
-                                            className="fill-current h-3 w-3"
-                                            viewBox="0 0 20 20"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <title>Menu</title>
-                                            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-                                        </svg>
-                                    </button>
+
+                                    <span>首页</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+
+                                    {showDropdown ? <Menu /> : null}
+
                                 </div>
                             </div>
 
