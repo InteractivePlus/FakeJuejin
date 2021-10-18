@@ -47,3 +47,19 @@ export function getTimeStampDesc(timespan) {
 
     return timeSpanStr;
 }
+
+export function convertTimeStampToWord(timespan) {
+    // 秒级时间戳补足0转毫秒级
+    if (timespan.length < 13) {
+        timespan = timespan.padEnd(13, "0");
+    }
+    timespan = parseInt(timespan);
+
+    var dateTime = new Date(timespan);
+
+    var year = dateTime.getFullYear();
+    var month = dateTime.getMonth() + 1;
+    var day = dateTime.getDate();
+
+    return `${year}年${String(month).padStart(2,"0")}月${day}日`;
+}

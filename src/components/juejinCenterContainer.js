@@ -1,0 +1,12 @@
+const JuejinCenterContainer = (props) => {
+    const { children } = props;
+    return (
+        <div className="flex justify-center mb-10 md:mb-0">
+            <div className="flex flex-col max-w-3xl w-full bg-white">
+                {children}
+            </div>
+        </div>
+    );
+};
+
+export default JuejinCenterContainer;
