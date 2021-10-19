@@ -17,6 +17,7 @@ module.exports = {
                 juejinbg: "#f4f5f5",
                 juejinnav: "#86909c",
                 juejinactive: "#1e80ff",
+                "juejin-focus-btn": "#6cbd45",
             },
         },
 
