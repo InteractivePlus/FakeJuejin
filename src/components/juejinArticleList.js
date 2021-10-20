@@ -53,10 +53,19 @@ const JuejinArticleList = () => {
     return (
         <JuejinCenterContainer>
             <div className="fixed bottom-0 md:sticky order-last md:order-first flex flex-1 py-4 px-6 border-b border-gray-200 w-full ">
-                <div className="flex flex-1 flex-row items-center justify-around md:justify-start md:divide-x divide-gray-300 text-sm ">
-                    <div className="md:pr-4 text-gray-600">热门</div>
-                    <div className="md:px-4 text-gray-400">最新</div>
-                    <div className="md:px-4 text-gray-400">历史</div>
+                <div className="hidden md:flex">
+                    <div className="flex flex-1 flex-row items-center justify-around md:justify-start md:divide-x divide-gray-300 text-sm ">
+                        <div className="md:pr-4 text-gray-600">热门</div>
+                        <div className="md:px-4 text-gray-400">最新</div>
+                        <div className="md:px-4 text-gray-400">历史</div>
+                    </div>
+                </div>
+                <div className="flex md:hidden">
+                    <div className="flex flex-1 flex-row items-center justify-around divide-gray-300 text-sm ">
+                        <div className="md:pr-4 text-gray-600">热门</div>
+                        <div className="md:px-4 text-gray-400">最新</div>
+                        <div className="md:px-4 text-gray-400">历史</div>
+                    </div>
                 </div>
             </div>
             <ul className="order-first md:order-last flex flex-col leading-7 w-full">

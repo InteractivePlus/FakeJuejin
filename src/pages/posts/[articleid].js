@@ -4,6 +4,7 @@ import ErrorPage from "next/error";
 import React from "react";
 import { Fragment, useRef, useState, useEffect } from "react";
 
+import Nav from "../../components/juejinNav";
 import JuejinArticleContentItem from "../../components/juejinArticleContent";
 import JuejinArticleCommentItem from "../../components/juejinArticleCommentList";
 import JuejinCenterContainer from "../../components/juejinCenterContainer";
@@ -36,6 +37,7 @@ export default function Post(props) {
 
     return (
         <div>
+            <Nav />
             <JuejinCenterContainer>
                 {isEmpty(articleFullInfo) ? (
                     <div></div>
