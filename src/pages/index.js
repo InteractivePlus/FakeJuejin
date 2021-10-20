@@ -13,18 +13,20 @@ export default function Home() {
     useEffect(() => {
         if (!showDropdown) return;
         function handleClick(event) {
-            dropdown.current &&
-                !dropdown.current.contains(event.target) &&
-                setShowDropdown(false);
+            (dropdown.current && !dropdown.current.contains(event.target)) ? setShowDropdown(false) : null;
             window.addEventListener("click", handleClick);
             return () => window.removeEventListener("click", handleClick);
         }
     }, [showDropdown]);
 
     const Menu = () => (
-        <div className="overflow-y-auto absolute  top-px h-96 w-52 rounded-b-box bg-white text-juejinnav left-0">
-            <ul className="flex flex-col">
-                <li>你爸</li>
+        <div style={{top:'58%',boxShadow: '0 1px 2px 0 rgb(0 0 0 / 10%)',border: '1px solid rgba(177,180,185,.45)',borderRadius: '4px'}} className="overflow-y-auto absolute h-72 w-40 bg-white text-juejinnav left-0">
+            <ul style={{fontSize:'1.05rem',lineHeight:'3rem'}} className="flex flex-col items-center">
+                <li className="text-juejinactive cursor-pointer flex-1">首页</li>
+                <li className="hover:text-juejinactive cursor-pointer flex-1">你妈</li>
+                <li className="hover:text-juejinactive cursor-pointer flex-1">你爷</li>
+                <li className="hover:text-juejinactive cursor-pointer flex-1">你奶</li>
+                <li className="hover:text-juejinactive cursor-pointer flex-1">二奶</li>
             </ul>
         </div>
     );
@@ -40,7 +42,7 @@ export default function Home() {
                                     {/* <!-- Website Logo --> */}
                                     <a
                                         href="#"
-                                        className="flex items-center py-4 px-2">
+                                        className="flex items-center py-4 md:px-2">
                                         <img
                                             className="w-auto h-6 md:block hidden"
                                             src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/7abc2b532f725d394feaf0141547ade7.svg"
@@ -55,13 +57,13 @@ export default function Home() {
                                 <div className="hidden md:flex items-center space-x-1 order-3">
                                     {/* <div className="flex-auto flex items-center ml-3"> */}
                                     <ul className="flex-grow flex text-juejinnav">
-                                        <li className="flex-1 px-5">
+                                        <li className="flex-1 px-5 text-juejinactive">
                                             <a className="cursor-pointer">
                                                 首页
                                             </a>
                                         </li>
 
-                                        <li className="flex-1 px-5">
+                                        <li className="flex-1 px-5 hover:text-juejinactive">
                                             <a className="cursor-pointer">
                                                 暂无
                                             </a>
