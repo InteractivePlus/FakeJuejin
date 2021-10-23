@@ -7,32 +7,65 @@ import JuejinCenterContainer from "../components/juejinCenterContainer";
 import { getCategories, getArticles } from "../api";
 
 const JuejinArticleList = () => {
-    React.useEffect(() => {
-        // console.log(getCategories());
-        // console.log(getArticles());
-        getArticles().then(
-            (response) => {
-                console.log(response.data);
-            },
-            (err) => {}
-        );
-    }, []);
+    // React.useEffect(() => {
+    //     // console.log(getCategories());
+    //     // console.log(getArticles());
+    //     getArticles().then(
+    //         (response) => {
+    //             console.log(response.data);
+    //         },
+    //         (err) => {}
+    //     );
+    // }, []);
 
     let DynamicItem = () => {
         let [dynamicList, setDynamicList] = React.useState([]);
+        let [listOffset, setListOffset] = React.useState(0);
+
+        let [isMoreLoading, setIsMoreLoading] = React.useState(false);
 
         React.useEffect(() => {
-            getArticles().then(
+            getArticles(0, "hot", listOffset, 10).then(
                 (response) => {
                     console.log(response.data);
                     setDynamicList(response.data["articles"]);
+                    setListOffset(listOffset + 10);
                 },
                 (err) => {}
             );
+
+            window.onscroll = () => {
+                if (
+                    window.innerHeight + window.scrollY >=
+                    document.body.offsetHeight
+                ) {
+                    if (!isMoreLoading) {
+                        setIsMoreLoading(true);
+                        console.log("fdddddd");
+                    }
+                }
+            };
         }, []);
 
+        React.useEffect(() => {
+            if (isMoreLoading) {
+                getArticles(0, "hot", listOffset, 10).then(
+                    (response) => {
+                        console.log(response.data);
+                        setDynamicList(
+                            dynamicList.concat(response.data["articles"])
+                        );
+                        setListOffset(listOffset + 10);
+                    },
+                    (err) => {}
+                ).then(() => {
+                    setIsMoreLoading(false);
+                });
+            }
+        }, [isMoreLoading]);
+
         return dynamicList.map((item) => {
-            console.log(item);
+            // console.log(item);
             return (
                 <JuejinArticleListItem
                     key={item["article_id"]}
@@ -52,7 +85,11 @@ const JuejinArticleList = () => {
 
     return (
         <JuejinCenterContainer>
-            <div className="fixed bottom-0 md:sticky order-last md:order-first flex flex-1 py-4 px-6 border-b border-gray-200 w-full ">
+            <div
+                className="fixed bottom-0 md:sticky order-last md:order-first flex flex-1 py-4 px-6 border-b border-gray-200 w-full "
+                onScroll={() => {
+                    console.log("lllll");
+                }}>
                 <div className="hidden md:flex">
                     <div className="flex flex-1 flex-row items-center justify-around md:justify-start md:divide-x divide-gray-300 text-sm ">
                         <div className="md:pr-4 text-gray-600">热门</div>
