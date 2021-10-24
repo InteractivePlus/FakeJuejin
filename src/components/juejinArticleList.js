@@ -4,25 +4,17 @@ import JuejinArticleListItem from "../components/juejinArticleListItem";
 
 import JuejinCenterContainer from "../components/juejinCenterContainer";
 
+import { useScrollBottom } from "../utils/scrollContext";
+
 import { getCategories, getArticles } from "../api";
 
 const JuejinArticleList = () => {
-    // React.useEffect(() => {
-    //     // console.log(getCategories());
-    //     // console.log(getArticles());
-    //     getArticles().then(
-    //         (response) => {
-    //             console.log(response.data);
-    //         },
-    //         (err) => {}
-    //     );
-    // }, []);
 
     let DynamicItem = () => {
         let [dynamicList, setDynamicList] = React.useState([]);
         let [listOffset, setListOffset] = React.useState(0);
 
-        let [isMoreLoading, setIsMoreLoading] = React.useState(false);
+        const { isScrollToBottom } = useScrollBottom();
 
         React.useEffect(() => {
             getArticles(0, "hot", listOffset, 10).then(
@@ -33,36 +25,24 @@ const JuejinArticleList = () => {
                 },
                 (err) => {}
             );
-
-            window.onscroll = () => {
-                if (
-                    window.innerHeight + window.scrollY >=
-                    document.body.offsetHeight
-                ) {
-                    if (!isMoreLoading) {
-                        setIsMoreLoading(true);
-                        console.log("fdddddd");
-                    }
-                }
-            };
         }, []);
 
+
         React.useEffect(() => {
-            if (isMoreLoading) {
-                getArticles(0, "hot", listOffset, 10).then(
-                    (response) => {
-                        console.log(response.data);
-                        setDynamicList(
-                            dynamicList.concat(response.data["articles"])
-                        );
-                        setListOffset(listOffset + 10);
-                    },
-                    (err) => {}
-                ).then(() => {
-                    setIsMoreLoading(false);
-                });
+            if (isScrollToBottom) {
+                getArticles(0, "hot", listOffset, 10)
+                    .then(
+                        (response) => {
+                            console.log(response.data);
+                            setDynamicList(
+                                dynamicList.concat(response.data["articles"])
+                            );
+                            setListOffset(listOffset + 10);
+                        },
+                        (err) => {}
+                    );
             }
-        }, [isMoreLoading]);
+        }, [isScrollToBottom]);
 
         return dynamicList.map((item) => {
             // console.log(item);

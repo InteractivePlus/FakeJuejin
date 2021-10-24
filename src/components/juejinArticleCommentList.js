@@ -4,20 +4,27 @@ import JuejinBasicListItem from "./JuejinBasicListItem";
 import JuejinCenterContainer from "./juejinCenterContainer";
 import JuejinArticleCommentMainBlock from "./juejinArticleCommentMainBlock";
 
+import { useScrollBottom } from "../utils/scrollContext";
+
 const JuejinArticleCommentItem = (props) => {
     const { children } = props;
 
+    const { isScrollToBottom } = useScrollBottom();
 
-    useEffect(() => {
-        window.onscroll = () => {
-            if (
-                window.innerHeight + window.scrollY >=
-                document.body.offsetHeight
-            ) {
-                //拉到底的Hooks
-            }
-        };
-    }, []);
+    React.useEffect(() => {
+        if (isScrollToBottom) {
+            // getArticles(0, "hot", listOffset, 10).then(
+            //     (response) => {
+            //         console.log(response.data);
+            //         setDynamicList(
+            //             dynamicList.concat(response.data["articles"])
+            //         );
+            //         setListOffset(listOffset + 10);
+            //     },
+            //     (err) => {}
+            // );
+        }
+    }, [isScrollToBottom]);
 
     return (
         <div className="px-6 py-8">
