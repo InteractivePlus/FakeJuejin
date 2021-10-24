@@ -6,7 +6,7 @@ const JuejinArticleCommentReplyBlock = (props) => {
 
     return (
 
-        <div className="flex flex-row py-3">
+        <div className="flex flex-row py-3" style={{ borderBottom: '1px solid #e5e6eb' }}>
             <div>
                 <div className="flex items-center justify-center space-x-3">
                     <div style={{ width: '24px', height: '24px' }} className="rounded-full border-0 border-base-100 overflow-hidden">

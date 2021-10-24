@@ -10,7 +10,7 @@ const JuejinArticleCommentBlock = (props) => {
 
     return (
 
-        <div className="flex flex-row py-3">
+        <div className="flex flex-row py-3" style={{ borderBottom: '1px solid #e5e6eb' }}>
             <div>
                 <JuejinRoundAvatar avatarSrc={avatarSrc}></JuejinRoundAvatar>
             </div>
