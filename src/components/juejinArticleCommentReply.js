@@ -1,23 +1,22 @@
-import JuejinRoundAvatar from "./juejinRoundAvatar";
-
-
-
-const JuejinArticleCommentBlock = (props) => {
+const JuejinArticleCommentReplyBlock = (props) => {
     //获取Props
 
-    const { children, authorName, avatarSrc, content, like, commentCount, authorJob, commentTime } = props;
+    const { children, authorName, avatarSrc, content, like, commentCount, commentTime } = props;
 
 
     return (
 
         <div className="flex flex-row py-3">
             <div>
-                <JuejinRoundAvatar avatarSrc={avatarSrc}></JuejinRoundAvatar>
+                <div className="flex items-center justify-center space-x-3">
+                    <div style={{ width: '24px', height: '24px' }} className="rounded-full border-0 border-base-100 overflow-hidden">
+                        <img className="w-full h-full" src={avatarSrc} />
+                    </div>
+                </div>
             </div>
             <div className="flex flex-col">
                 <div className="px-3 divide-x divide-gray-300 flex flex-row " style={{ fontSize: '14px' }}>
                     <div className="pr-3">{authorName}</div>
-                    <div className="px-3 text-juejinnav">{authorJob}</div>
                     <div className="px-3 text-juejinnav">{commentTime}</div>
                 </div>
                 <div className="break-all p-3" style={{ fontSize: '14px', color: '#4e5969' }}>
@@ -46,7 +45,4 @@ const JuejinArticleCommentBlock = (props) => {
 }
 
 
-
-
-
-export default JuejinArticleCommentBlock;
+export default JuejinArticleCommentReplyBlock;

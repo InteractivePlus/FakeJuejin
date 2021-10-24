@@ -2,29 +2,30 @@ import React from "react";
 import { Fragment, useRef, useState, useEffect } from "react";
 import JuejinBasicListItem from "./JuejinBasicListItem";
 import JuejinCenterContainer from "./juejinCenterContainer";
-import JuejinArticleCommentMainBlock from "./juejinArticleCommentMainBlock";
-
+import JuejinArticleCommentBlock from "./juejinArticleCommentMainBlock";
+import JuejinArticleCommentReplyContainer from "./juejinArticleCommentReplyBlock";
+import JuejinArticleCommentReplyBlock from "./juejinArticleCommentReply";
 import { useScrollBottom } from "../utils/scrollContext";
 
 const JuejinArticleCommentItem = (props) => {
     const { children } = props;
 
-    const { isScrollToBottom } = useScrollBottom();
+    //const { isScrollToBottom } = useScrollBottom();
 
-    React.useEffect(() => {
-        if (isScrollToBottom) {
-            // getArticles(0, "hot", listOffset, 10).then(
-            //     (response) => {
-            //         console.log(response.data);
-            //         setDynamicList(
-            //             dynamicList.concat(response.data["articles"])
-            //         );
-            //         setListOffset(listOffset + 10);
-            //     },
-            //     (err) => {}
-            // );
-        }
-    }, [isScrollToBottom]);
+    // React.useEffect(() => {
+    //   if (isScrollToBottom) {
+    // getArticles(0, "hot", listOffset, 10).then(
+    //     (response) => {
+    //         console.log(response.data);
+    //         setDynamicList(
+    //             dynamicList.concat(response.data["articles"])
+    //         );
+    //         setListOffset(listOffset + 10);
+    //     },
+    //     (err) => {}
+    // );
+    //      }
+    // }, [isScrollToBottom]);
 
     return (
         <div className="px-6 py-8">
@@ -43,14 +44,29 @@ const JuejinArticleCommentItem = (props) => {
                     </svg>
                 </div>
             </div>
-            <JuejinArticleCommentMainBlock
-                authorName="我是你爸"
-                avatarSrc="https://avatars.githubusercontent.com/u/22854837?v=4"
-                content="儿啊，你快回来吧，父亲知错了"
-                like="999+"
-                commentCount="999+">
-                saasasas
-            </JuejinArticleCommentMainBlock>
+            <div className="mt-5">
+                <JuejinArticleCommentBlock
+                    authorName="我是你爸"
+                    authorJob="二营长"
+                    avatarSrc="https://avatars.githubusercontent.com/u/22854837?v=4"
+                    content="儿啊，你快回来吧，父亲知错了dasdasdasdsadasd32r23d32d23d3d3qd3d23qd23d2d23qd23dq32dq3dw3d2d323qd23dq23ddawedw3dewd3dewewfedwedwedwedwed"
+                    like="999+"
+                    commentCount="999+"
+                    commentTime="114514小时前"
+                >
+                    <JuejinArticleCommentReplyContainer>
+                        <JuejinArticleCommentReplyBlock
+                            authorName="我是你爸"
+                            avatarSrc="https://avatars.githubusercontent.com/u/22854837?v=4"
+                            content="儿啊，你快回来吧，父亲知错了dasdasdasdsadasd32r23d32d23d3d3qd3d23qd23d2d23qd23dq32dq3dw3d2d323qd23dq23ddawedw3dewd3dewewfedwedwedwedwed"
+                            like="999+"
+                            commentCount="999+"
+                            commentTime="114514小时前"
+                        >
+                        </JuejinArticleCommentReplyBlock>
+                    </JuejinArticleCommentReplyContainer>
+                </JuejinArticleCommentBlock>
+            </div>
         </div>
     );
 };
