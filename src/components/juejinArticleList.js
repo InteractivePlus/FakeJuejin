@@ -8,93 +8,187 @@ import { useScrollBottom } from "../utils/scrollContext";
 
 import { getCategories, getArticles } from "../api";
 
-const JuejinArticleList = () => {
+import { historyArticleStore } from "../store/historyArticleStore";
 
-    let DynamicItem = () => {
-        let [dynamicList, setDynamicList] = React.useState([]);
-        let [listOffset, setListOffset] = React.useState(0);
+import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 
-        const { isScrollToBottom } = useScrollBottom();
+import { isEmpty } from "../utils/commonutils";
 
-        React.useEffect(() => {
-            getArticles(0, "hot", listOffset, 10).then(
+// import mobx from 'mobx'
+
+import { toJS } from "mobx";
+
+// 两个自定义tab
+const ArticleViewFirstTab = ({ children }) => (
+    <Tab>
+        <div className="md:pr-4 text-gray-600">{children}</div>
+    </Tab>
+);
+
+const ArticleViewOtherTab = ({ children }) => (
+    <Tab>
+        <div className="md:px-4 text-gray-600">{children}</div>
+    </Tab>
+);
+
+ArticleViewFirstTab.tabsRole = "Tab";
+ArticleViewOtherTab.tabsRole = "Tab";
+
+
+/*
+* 动态列表
+* @constructor
+* @param {function(Number):Promise<Object>} - 获取数据接口，传入偏移量
+*/ 
+const DynamicList = (props) => {
+    const { dataInterface } = props;
+
+    let [dynamicList, setDynamicList] = React.useState([]);
+    let [listOffset, setListOffset] = React.useState(0);
+
+    const { isScrollToBottom } = useScrollBottom();
+
+    React.useEffect(() => {
+        console.log(dataInterface(listOffset));
+        dataInterface(listOffset).then(
+            (response) => {
+                console.log(response.data);
+                setDynamicList(dynamicList.concat(response.data["articles"]));
+                setListOffset(listOffset + 10);
+            },
+            (err) => {}
+        );
+    }, []);
+
+    React.useEffect(() => {
+        if (isScrollToBottom) {
+            dataInterface(listOffset).then(
                 (response) => {
                     console.log(response.data);
-                    setDynamicList(response.data["articles"]);
+                    setDynamicList(
+                        dynamicList.concat(response.data["articles"])
+                    );
                     setListOffset(listOffset + 10);
                 },
                 (err) => {}
             );
-        }, []);
+        }
+    }, [isScrollToBottom]);
 
+    let handleItemClick = async (item) => {
+        console.log(item);
+        historyArticleStore.add(item);
+        console.log(historyArticleStore.historyArticleList);
+    };
 
-        React.useEffect(() => {
-            if (isScrollToBottom) {
-                getArticles(0, "hot", listOffset, 10)
-                    .then(
-                        (response) => {
-                            console.log(response.data);
-                            setDynamicList(
-                                dynamicList.concat(response.data["articles"])
-                            );
-                            setListOffset(listOffset + 10);
-                        },
-                        (err) => {}
-                    );
-            }
-        }, [isScrollToBottom]);
+    return dynamicList.map((item) => {
+        return (
+            <JuejinArticleListItem
+                key={item["article_id"]}
+                articleId={item["article_id"]}
+                author={item["author_user_info"]["user_name"]}
+                date={item["article_info"]["ctime"]}
+                title={item["article_info"]["title"]}
+                contentAbstract={item["article_info"]["brief_content"]}
+                coverImg={item["article_info"]["cover_image"]}
+                viewCount={item["article_info"]["view_count"]}
+                diggCount={item["article_info"]["digg_count"]}
+                commentCount={item["article_info"]["comment_count"]}
+                onClick={() => {
+                    handleItemClick(item);
+                }}
+            />
+        );
+    });
+};
 
-        return dynamicList.map((item) => {
-            // console.log(item);
-            return (
-                <JuejinArticleListItem
-                    key={item["article_id"]}
-                    articleId={item["article_id"]}
-                    author={item["author_user_info"]["user_name"]}
-                    date={item["article_info"]["ctime"]}
-                    title={item["article_info"]["title"]}
-                    contentAbstract={item["article_info"]["brief_content"]}
-                    coverImg={item["article_info"]["cover_image"]}
-                    viewCount={item["article_info"]["view_count"]}
-                    diggCount={item["article_info"]["digg_count"]}
-                    commentCount={item["article_info"]["comment_count"]}
-                />
+// 其实更应该叫ListTabView（？）
+const JuejinArticleList = () => {
+
+    let getArticlesInterface = (listOffset) => {
+        return new Promise((resolve, reject) => {
+            getArticles(0, "hot", listOffset, 10).then(
+                (response) => {
+                    resolve(response);
+                },
+                (err) => {
+                    reject(err);
+                }
             );
         });
     };
 
+
+        let getHistoryArticlesInterface = (listOffset) => {
+            return new Promise((resolve, reject) => {
+                const list = toJS(historyArticleStore.historyArticleList);
+                console.log(list);
+                // if (isEmpty(list["articles"])) {
+                    if (list["data"]["articles"].length==0) {
+                    console.log("rere");
+                    reject();
+                } else {
+                    console.log("res");
+                    resolve(list);
+                }
+                // getArticles(0, "hot", listOffset, 10).then(
+                //     (response) => {
+                //         resolve(response);
+                //     },
+                //     (err) => {
+                //         reject(err);
+                //     }
+                // );
+            });
+    };
+    
     return (
         <JuejinCenterContainer>
-            <div
-                className="fixed bottom-0 md:sticky order-last md:order-first flex flex-1 py-4 px-6 border-b border-gray-200 w-full "
-                onScroll={() => {
-                    console.log("lllll");
-                }}>
-                <div className="hidden md:flex">
-                    <div className="flex flex-1 flex-row items-center justify-around md:justify-start md:divide-x divide-gray-300 text-sm ">
-                        <div className="md:pr-4 text-gray-600">热门</div>
-                        <div className="md:px-4 text-gray-400">最新</div>
-                        <div className="md:px-4 text-gray-400">历史</div>
+            <Tabs defaultIndex={0}>
+                <TabList>
+                    <div className="fixed bottom-0 md:sticky order-last md:order-first flex flex-1 py-4 px-6 border-b border-gray-200 w-full ">
+                        <div className="hidden md:flex">
+                            <div className="flex flex-1 flex-row items-center justify-around md:justify-start md:divide-x divide-gray-300 text-sm ">
+                                <ArticleViewFirstTab>热门</ArticleViewFirstTab>
+                                <ArticleViewOtherTab>最新</ArticleViewOtherTab>
+                                <ArticleViewOtherTab>历史</ArticleViewOtherTab>
+                            </div>
+                        </div>
+                        {/* <div className="flex md:hidden">
+                            <div className="flex flex-1 flex-row items-center justify-around divide-gray-300 text-sm ">
+                                <ArticleViewFirstTab>热门</ArticleViewFirstTab>
+                                <ArticleViewOtherTab>最新</ArticleViewOtherTab>
+                                <ArticleViewOtherTab>历史</ArticleViewOtherTab>
+                            </div>
+                        </div> */}
                     </div>
-                </div>
-                <div className="flex md:hidden">
-                    <div className="flex flex-1 flex-row items-center justify-around divide-gray-300 text-sm ">
-                        <div className="md:pr-4 text-gray-600">热门</div>
-                        <div className="md:px-4 text-gray-400">最新</div>
-                        <div className="md:px-4 text-gray-400">历史</div>
-                    </div>
-                </div>
-            </div>
-            <ul className="order-first md:order-last flex flex-col leading-7 w-full">
-                {/* <JuejinArticleListItem
+                </TabList>
+                <TabPanel>
+                    {/* 热门 */}
+                    <ul className="order-first md:order-last flex flex-col leading-7 w-full">
+                        {/* <JuejinArticleListItem
                         author="测试用户"
                         date="1626924865"
                         title="【小知识】测试标题测试标题测试标题测试标题"
                         contentAbstract="测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本"
                         coverImg="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bd2683efa3fa43deb13fb91c0cbd4b15~tplv-k3u1fbpfcp-no-mark:240:240:240:160.awebp"
                     /> */}
-                <DynamicItem />
-            </ul>
+                        <DynamicList dataInterface={getArticlesInterface} />
+                    </ul>
+                </TabPanel>
+                <TabPanel>
+                    {/* 最新 */}
+                    Panel 2
+                </TabPanel>
+                <TabPanel>
+                    {/* 历史 */}
+                    <ul className="order-first md:order-last flex flex-col leading-7 w-full">
+                        <DynamicList
+                            dataInterface={getHistoryArticlesInterface}
+                        />
+                    </ul>
+                </TabPanel>
+            </Tabs>
         </JuejinCenterContainer>
     );
 };

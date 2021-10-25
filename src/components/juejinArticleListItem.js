@@ -21,13 +21,15 @@ const JuejinArticleListItem = (props) => {
         commentCount,
     } = props;
 
+    const { onClick } = props;
+
     // const CoverImgWrapper = () => {
     //     return
     // }
 
-    let handleItemClick = async () => {
-        console.log(articleId);
-    };
+    // let handleItemClick = async () => {
+    //     console.log(articleId);
+    // };
 
     return (
         <Link
@@ -39,7 +41,7 @@ const JuejinArticleListItem = (props) => {
             <a
                 className="cursor-pointer hover:bg-gray-50"
                 target="_blank"
-                onClick={handleItemClick}>
+                onClick={onClick}>
                 <JuejinBasicListItem>
                     <div className="flex flex-1 flex-row items-center divide-x divide-gray-300 text-sm ">
                         <div className="pr-4 text-gray-600">{author}</div>

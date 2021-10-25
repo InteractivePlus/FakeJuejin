@@ -48,6 +48,6 @@ export const ScrollProvider = ({ children }) => {
 //自定义Hook，作为和isScrollToBottom状态绑定的“行为”，它通过context接收新封装的provider中的数据
 export const useScrollBottom = () => {
     const { isScrollToBottom } = React.useContext(scrollContext);
-    console.log("use");
+    // console.log("use");
     return { isScrollToBottom };
 };

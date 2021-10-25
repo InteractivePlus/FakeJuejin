@@ -6,6 +6,7 @@ import { Fragment, useRef, useState, useEffect } from "react";
 import Nav from "../components/juejinNav";
 import JuejinArticleList from "../components/juejinArticleList";
 
+import { TimerView, myTimer } from "../store/historyArticleStore";
 
 export default function Home() {
 
@@ -16,6 +17,7 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Nav />
+            {/* <TimerView timer={myTimer} /> */}
             <JuejinArticleList />
         </div>
     );
