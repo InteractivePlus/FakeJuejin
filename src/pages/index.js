@@ -8,7 +8,9 @@ import JuejinArticleList from "../components/juejinArticleList";
 
 import { TimerView, myTimer } from "../store/historyArticleStore";
 
-export default function Home() {
+import { resetIdCounter } from "react-tabs";
+
+const Home=()=> {
 
     return (
         <div className="font-juejin">
@@ -22,3 +24,10 @@ export default function Home() {
         </div>
     );
 }
+
+Home.getInitialProps = async (ctx) => {
+    resetIdCounter();
+    return {};
+};
+
+export default Home;

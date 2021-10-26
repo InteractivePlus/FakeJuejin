@@ -18,6 +18,7 @@ module.exports = {
                 juejinnav: "#86909c",
                 juejinactive: "#1e80ff",
                 "juejin-focus-btn": "#6cbd45",
+                "juejin-focus-text-blue": "#007fff",
             },
         },
 

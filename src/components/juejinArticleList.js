@@ -10,7 +10,7 @@ import { getCategories, getArticles } from "../api";
 
 import { historyArticleStore } from "../store/historyArticleStore";
 
-import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
+import { Tabs, TabList, Tab, TabPanel, resetIdCounter } from "react-tabs";
 
 import { isEmpty } from "../utils/commonutils";
 
@@ -19,27 +19,46 @@ import { isEmpty } from "../utils/commonutils";
 import { toJS } from "mobx";
 
 // 两个自定义tab
-const ArticleViewFirstTab = ({ children }) => (
-    <Tab>
-        <div className="md:pr-4 text-gray-600">{children}</div>
-    </Tab>
-);
+const ArticleViewFirstTab = (props) => {
+    const { isSelected, children } = props;
+    return (
+        <Tab>
+            <div
+                className={
+                    "cursor-pointer md:pr-4 " +
+                    (isSelected ? "text-juejin-focus-text-blue" : "text-gray-400")
+                }>
+                {children}
+            </div>
+        </Tab>
+    );
+};
 
-const ArticleViewOtherTab = ({ children }) => (
-    <Tab>
-        <div className="md:px-4 text-gray-600">{children}</div>
-    </Tab>
-);
+const ArticleViewOtherTab = (props) => {
+    const { isSelected, children } = props;
+    return (
+        <Tab>
+            <div
+                className={
+                    "cursor-pointer md:px-4 " +
+                    (isSelected
+                        ? "text-juejin-focus-text-blue"
+                        : "text-gray-400")
+                }>
+                {children}
+            </div>
+        </Tab>
+    );
+};
 
 ArticleViewFirstTab.tabsRole = "Tab";
 ArticleViewOtherTab.tabsRole = "Tab";
 
-
 /*
-* 动态列表
-* @constructor
-* @param {function(Number):Promise<Object>} - 获取数据接口，传入偏移量
-*/ 
+ * 动态列表
+ * @constructor
+ * @param {function(Number):Promise<Object>} - 获取数据接口，传入偏移量。这是通用接口
+ */
 const DynamicList = (props) => {
     const { dataInterface } = props;
 
@@ -60,6 +79,7 @@ const DynamicList = (props) => {
         );
     }, []);
 
+    // 如果滚到底部就调用接口更新数据
     React.useEffect(() => {
         if (isScrollToBottom) {
             dataInterface(listOffset).then(
@@ -104,8 +124,9 @@ const DynamicList = (props) => {
 
 // 其实更应该叫ListTabView（？）
 const JuejinArticleList = () => {
+    const [tabIndex, setTabIndex] = React.useState(0);
 
-    let getArticlesInterface = (listOffset) => {
+    let getHotArticlesInterface = (listOffset) => {
         return new Promise((resolve, reject) => {
             getArticles(0, "hot", listOffset, 10).then(
                 (response) => {
@@ -118,40 +139,60 @@ const JuejinArticleList = () => {
         });
     };
 
-
-        let getHistoryArticlesInterface = (listOffset) => {
-            return new Promise((resolve, reject) => {
-                const list = toJS(historyArticleStore.historyArticleList);
-                console.log(list);
-                // if (isEmpty(list["articles"])) {
-                    if (list["data"]["articles"].length==0) {
-                    console.log("rere");
-                    reject();
-                } else {
-                    console.log("res");
-                    resolve(list);
+    let getNewArticlesInterface = (listOffset) => {
+        return new Promise((resolve, reject) => {
+            getArticles(0, "new", listOffset, 10).then(
+                (response) => {
+                    resolve(response);
+                },
+                (err) => {
+                    reject(err);
                 }
-                // getArticles(0, "hot", listOffset, 10).then(
-                //     (response) => {
-                //         resolve(response);
-                //     },
-                //     (err) => {
-                //         reject(err);
-                //     }
-                // );
-            });
+            );
+        });
     };
-    
+
+    let getHistoryArticlesInterface = (listOffset) => {
+        return new Promise((resolve, reject) => {
+            const list = toJS(historyArticleStore.historyArticleList);
+            console.log(list);
+            // if (isEmpty(list["articles"])) {
+            if (list["data"]["articles"].length == 0) {
+                console.log("rere");
+                reject();
+            } else {
+                console.log("res");
+                resolve(list);
+            }
+            // getArticles(0, "hot", listOffset, 10).then(
+            //     (response) => {
+            //         resolve(response);
+            //     },
+            //     (err) => {
+            //         reject(err);
+            //     }
+            // );
+        });
+    };
+
     return (
         <JuejinCenterContainer>
-            <Tabs defaultIndex={0}>
+            <Tabs
+                selectedIndex={tabIndex}
+                onSelect={(index) => setTabIndex(index)}>
                 <TabList>
                     <div className="fixed bottom-0 md:sticky order-last md:order-first flex flex-1 py-4 px-6 border-b border-gray-200 w-full ">
                         <div className="hidden md:flex">
                             <div className="flex flex-1 flex-row items-center justify-around md:justify-start md:divide-x divide-gray-300 text-sm ">
-                                <ArticleViewFirstTab>热门</ArticleViewFirstTab>
-                                <ArticleViewOtherTab>最新</ArticleViewOtherTab>
-                                <ArticleViewOtherTab>历史</ArticleViewOtherTab>
+                                <ArticleViewFirstTab isSelected={tabIndex == 0}>
+                                    热门
+                                </ArticleViewFirstTab>
+                                <ArticleViewOtherTab isSelected={tabIndex == 1}>
+                                    最新
+                                </ArticleViewOtherTab>
+                                <ArticleViewOtherTab isSelected={tabIndex == 2}>
+                                    历史
+                                </ArticleViewOtherTab>
                             </div>
                         </div>
                         {/* <div className="flex md:hidden">
@@ -173,12 +214,14 @@ const JuejinArticleList = () => {
                         contentAbstract="测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本"
                         coverImg="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bd2683efa3fa43deb13fb91c0cbd4b15~tplv-k3u1fbpfcp-no-mark:240:240:240:160.awebp"
                     /> */}
-                        <DynamicList dataInterface={getArticlesInterface} />
+                        <DynamicList dataInterface={getHotArticlesInterface} />
                     </ul>
                 </TabPanel>
                 <TabPanel>
                     {/* 最新 */}
-                    Panel 2
+                    <ul className="order-first md:order-last flex flex-col leading-7 w-full">
+                        <DynamicList dataInterface={getNewArticlesInterface} />
+                    </ul>
                 </TabPanel>
                 <TabPanel>
                     {/* 历史 */}
@@ -191,6 +234,10 @@ const JuejinArticleList = () => {
             </Tabs>
         </JuejinCenterContainer>
     );
+};
+
+JuejinArticleList.getInitialProps = async (ctx) => {
+    resetIdCounter();
 };
 
 export default JuejinArticleList;
