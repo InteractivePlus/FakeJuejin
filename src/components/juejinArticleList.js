@@ -156,7 +156,7 @@ const JuejinArticleList = () => {
         return new Promise((resolve, reject) => {
             const list = toJS(historyArticleStore.historyArticleList);
             console.log(list);
-            // if (isEmpty(list["articles"])) {
+            
             if (list["data"]["articles"].length == 0) {
                 console.log("rere");
                 reject();
@@ -164,14 +164,6 @@ const JuejinArticleList = () => {
                 console.log("res");
                 resolve(list);
             }
-            // getArticles(0, "hot", listOffset, 10).then(
-            //     (response) => {
-            //         resolve(response);
-            //     },
-            //     (err) => {
-            //         reject(err);
-            //     }
-            // );
         });
     };
 
@@ -181,8 +173,8 @@ const JuejinArticleList = () => {
                 selectedIndex={tabIndex}
                 onSelect={(index) => setTabIndex(index)}>
                 <TabList>
-                    <div className="fixed bottom-0 md:sticky order-last md:order-first flex flex-1 py-4 px-6 border-b border-gray-200 w-full ">
-                        <div className="hidden md:flex">
+                    <div className="fixed bottom-0 md:sticky order-last md:order-first flex flex-1 py-4 px-6 border-b border-gray-200 w-full bg-white">
+                        {/* <div className="hidden md:flex"> */}
                             <div className="flex flex-1 flex-row items-center justify-around md:justify-start md:divide-x divide-gray-300 text-sm ">
                                 <ArticleViewFirstTab isSelected={tabIndex == 0}>
                                     热门
@@ -194,7 +186,7 @@ const JuejinArticleList = () => {
                                     历史
                                 </ArticleViewOtherTab>
                             </div>
-                        </div>
+                        {/* </div> */}
                         {/* <div className="flex md:hidden">
                             <div className="flex flex-1 flex-row items-center justify-around divide-gray-300 text-sm ">
                                 <ArticleViewFirstTab>热门</ArticleViewFirstTab>
