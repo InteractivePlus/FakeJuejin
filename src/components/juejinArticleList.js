@@ -18,6 +18,8 @@ import { isEmpty } from "../utils/commonutils";
 
 import { toJS } from "mobx";
 
+
+
 // 两个自定义tab
 const ArticleViewFirstTab = (props) => {
     const { isSelected, children } = props;
@@ -61,10 +63,12 @@ ArticleViewOtherTab.tabsRole = "Tab";
  */
 const DynamicList = (props) => {
     const { dataInterface } = props;
+    const [Waiting, setWaiting] = React.useState(false);
+    const delay = ms => new Promise(res => setTimeout(res, ms));
 
     let [dynamicList, setDynamicList] = React.useState([]);
     let [listOffset, setListOffset] = React.useState(0);
-
+    
     const { isScrollToBottom } = useScrollBottom();
 
     React.useEffect(() => {
@@ -75,13 +79,16 @@ const DynamicList = (props) => {
                 setDynamicList(dynamicList.concat(response.data["articles"]));
                 setListOffset(listOffset + 10);
             },
-            (err) => {}
+            (err) => { }
         );
     }, []);
 
     // 如果滚到底部就调用接口更新数据
-    React.useEffect(() => {
+    React.useEffect(async () => {
         if (isScrollToBottom) {
+            setWaiting(true)
+            await delay(600)
+            setWaiting(false)
             dataInterface(listOffset).then(
                 (response) => {
                     console.log(response.data);
@@ -90,8 +97,9 @@ const DynamicList = (props) => {
                     );
                     setListOffset(listOffset + 10);
                 },
-                (err) => {}
-            );
+                (err) => { }
+            )
+
         }
     }, [isScrollToBottom]);
 
@@ -114,10 +122,12 @@ const DynamicList = (props) => {
                 viewCount={item["article_info"]["view_count"]}
                 diggCount={item["article_info"]["digg_count"]}
                 commentCount={item["article_info"]["comment_count"]}
+                Waiting={Waiting}
                 onClick={() => {
                     handleItemClick(item);
                 }}
             />
+            
         );
     });
 };
@@ -156,7 +166,7 @@ const JuejinArticleList = () => {
         return new Promise((resolve, reject) => {
             const list = toJS(historyArticleStore.historyArticleList);
             console.log(list);
-            
+
             if (list["data"]["articles"].length == 0) {
                 console.log("rere");
                 reject();

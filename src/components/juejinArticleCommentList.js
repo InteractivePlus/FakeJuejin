@@ -7,6 +7,70 @@ import JuejinArticleCommentReplyContainer from "./juejinArticleCommentReplyBlock
 import JuejinArticleCommentReplyBlock from "./juejinArticleCommentReply";
 import { useScrollBottom } from "../utils/scrollContext";
 
+/*
+const DynamicCommentList = (props) => {
+    const { dataInterface } = props;
+
+    let [dynamicList, setDynamicList] = React.useState([]);
+    let [listOffset, setListOffset] = React.useState(0);
+
+    const { isScrollToBottom } = useScrollBottom();
+
+    React.useEffect(() => {
+        console.log(dataInterface(listOffset));
+        dataInterface(listOffset).then(
+            (response) => {
+                console.log(response.data);
+                setDynamicList(dynamicList.concat(response.data["articles"]));
+                setListOffset(listOffset + 10);
+            },
+            (err) => {}
+        );
+    }, []);
+
+    // 如果滚到底部就调用接口更新数据
+    React.useEffect(() => {
+        if (isScrollToBottom) {
+            dataInterface(listOffset).then(
+                (response) => {
+                    console.log(response.data);
+                    setDynamicList(
+                        dynamicList.concat(response.data["articles"])
+                    );
+                    setListOffset(listOffset + 10);
+                },
+                (err) => {}
+            );
+        }
+    }, [isScrollToBottom]);
+
+    let handleItemClick = async (item) => {
+        console.log(item);
+        historyArticleStore.add(item);
+        console.log(historyArticleStore.historyArticleList);
+    };
+
+    return dynamicList.map((item) => {
+        return (
+            <JuejinArticleListItem
+                key={item["article_id"]}
+                articleId={item["article_id"]}
+                author={item["author_user_info"]["user_name"]}
+                date={item["article_info"]["ctime"]}
+                title={item["article_info"]["title"]}
+                contentAbstract={item["article_info"]["brief_content"]}
+                coverImg={item["article_info"]["cover_image"]}
+                viewCount={item["article_info"]["view_count"]}
+                diggCount={item["article_info"]["digg_count"]}
+                commentCount={item["article_info"]["comment_count"]}
+                onClick={() => {
+                    handleItemClick(item);
+                }}
+            />
+        );
+    });
+};
+*/
 const JuejinArticleCommentItem = (props) => {
     const { children } = props;
 
@@ -14,9 +78,13 @@ const JuejinArticleCommentItem = (props) => {
 
     React.useEffect(() => {
         if (isScrollToBottom) {
+
+
             
         }
     }, [isScrollToBottom]);
+
+    
 
     return (
         <div className="px-6 py-8">

@@ -37,29 +37,37 @@ const CategoryTabPanel = (props) => {
 };
 CategoryTabPanel.tabsRole = "TabPanel";
 
-const Menu = () => (
-    <div
-        style={{
-            top: "58%",
-            boxShadow: "0 1px 2px 0 rgb(0 0 0 / 10%)",
-            border: "1px solid rgba(177,180,185,.45)",
-            borderRadius: "4px",
-        }}
-        className="overflow-y-auto absolute h-72 w-40 bg-white text-juejinnav left-0">
-        <ul
-            style={{ fontSize: "1.05rem", lineHeight: "3rem" }}
-            className="flex flex-col items-center">
-            <li className="text-juejinactive cursor-pointer flex-1">首页</li>
-            <li className="hover:text-juejinactive cursor-pointer flex-1">
-                暂无
-            </li>
-        </ul>
-    </div>
-);
+const Menu = (props) => {
+    const { dropdown } = props;
+    return (
+        <div
+            ref={dropdown}
+            style={{
+                top: "58%",
+                boxShadow: "0 1px 2px 0 rgb(0 0 0 / 10%)",
+                border: "1px solid rgba(177,180,185,.45)",
+                borderRadius: "4px",
+            }}
+            className="overflow-y-auto absolute h-72 w-40 bg-white text-juejinnav left-0">
+            <ul
+                style={{ fontSize: "1.05rem", lineHeight: "3rem" }}
+                className="flex flex-col items-center">
+                <li className="text-juejinactive cursor-pointer flex-1">首页</li>
+                <li className="hover:text-juejinactive cursor-pointer flex-1">
+                    暂无
+                </li>
+            </ul>
+        </div>
+    )
+}
 
 const Nav = () => {
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showSearch, setShowSearch] = useState(false);
+    //This one must be global!!
     const dropdown = useRef(null);
+    const SearchBar = useRef(null);
+
     const [categoriesList, setCategoriesList] = useState([]); //一级类别tab，纯数组形式
 
     // 用于切换一级类别tab
@@ -72,24 +80,39 @@ const Nav = () => {
                 console.log(response.data);
                 setCategoriesList(response.data["categories"]);
             },
-            (err) => {}
+            (err) => { }
         );
         // 默认为0
         // setCurrentCategory(0);
     }, []);
 
     React.useEffect(() => {
+
         if (!showDropdown) return;
         function handleClick(event) {
-            dropdown.current && !dropdown.current.contains(event.target)
-                ? setShowDropdown(false)
-                : null;
-            window.addEventListener("click", handleClick);
-            return () => window.removeEventListener("click", handleClick);
+            if (dropdown.current && !dropdown.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
         }
+        window.addEventListener("click", handleClick);
+        return () => window.removeEventListener("click", handleClick);
     }, [showDropdown]);
 
-    const clickSearch = (e) => {};
+
+    React.useEffect(() => {
+        //故技重施
+        if (!showSearch) return;
+        function handleClick(event) {
+            if (SearchBar.current && !SearchBar.current.contains(event.target)) {
+                setShowSearch(false);
+            }
+        }
+        window.addEventListener("click", handleClick);
+        return () => window.removeEventListener("click", handleClick);
+    }, [showSearch]);
+
+
+
 
     return (
         <div className="sticky top-0 mb-4 border-t flex-none z-50">
@@ -152,23 +175,24 @@ const Nav = () => {
                                             />
                                         </svg>
 
-                                        {showDropdown ? <Menu /> : null}
+                                        {showDropdown ? <Menu dropdown={dropdown} /> : null}
                                     </div>
                                 </div>
 
                                 {/* <!-- Secondary Navbar items --> */}
-                                <div className="flex flex-shrink-0 flex-grow-0 justify-end">
-                                    <div className="flex items-center justify-center">
-                                        <div
+                                <div className="flex justify-between" >
+                                    <div className="flex items-center justify-center ">
+                                        <form
+                                            ref={SearchBar}
+                                            onClick={() => setShowSearch(b => !b)}
                                             style={{
-                                                transition: "width .3s",
                                                 background: "#f4f5f5",
                                                 color: "#86909c",
                                                 padding: "0.6rem 0 0.6rem 1rem",
                                                 height: "55%",
                                             }}
-                                            className="flex-grow-0 w-44	text-sm flex items-center justify-between mx-9 hover:w-96">
-                                            <div>探索稀土掘金</div>
+                                            className={`text-sm flex items-center justify-between mx-9 ${showSearch ? "border border-juejinactive" : ""}`}>
+                                            <input type="search" maxLength="32" placeholder={showSearch ? "搜索文章/小册/标签/用户" : "探索稀土掘金"} style={{ transition: "width .3s" }} className={`outline-none bg-transparent w-44 ${showSearch ? "w-96" : ""}`} />
                                             <div className="mr-2">
                                                 <img
                                                     src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/8f68a2223e9650f14d6e6781cdcd717a.svg"
@@ -176,7 +200,7 @@ const Nav = () => {
                                                     className="cursor-pointer"
                                                 />
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
                                     <JuejinRoundAvatar avatarSrc="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"></JuejinRoundAvatar>
                                 </div>
