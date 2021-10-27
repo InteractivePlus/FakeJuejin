@@ -10,22 +10,13 @@ import { useScrollBottom } from "../utils/scrollContext";
 const JuejinArticleCommentItem = (props) => {
     const { children } = props;
 
-    //const { isScrollToBottom } = useScrollBottom();
+    const { isScrollToBottom } = useScrollBottom();
 
-    // React.useEffect(() => {
-    //   if (isScrollToBottom) {
-    // getArticles(0, "hot", listOffset, 10).then(
-    //     (response) => {
-    //         console.log(response.data);
-    //         setDynamicList(
-    //             dynamicList.concat(response.data["articles"])
-    //         );
-    //         setListOffset(listOffset + 10);
-    //     },
-    //     (err) => {}
-    // );
-    //      }
-    // }, [isScrollToBottom]);
+    React.useEffect(() => {
+        if (isScrollToBottom) {
+            
+        }
+    }, [isScrollToBottom]);
 
     return (
         <div className="px-6 py-8">

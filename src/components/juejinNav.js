@@ -34,6 +34,7 @@ const Menu = () => (
 
 const Nav = () => {
     const [showDropdown, setShowDropdown] = useState(false);
+    //const [use] = useState(false);
     const dropdown = useRef(null);
 
     useEffect(() => {
@@ -47,6 +48,9 @@ const Nav = () => {
         }
     }, [showDropdown]);
 
+    const clickSearch = (e) => {
+
+    }
     return (
         <div className="sticky top-0 mb-4 border-t border-white bg-white flex-none z-50">
             <div className="w-full mx-auto">
@@ -110,7 +114,21 @@ const Nav = () => {
                             </div>
 
                             {/* <!-- Secondary Navbar items --> */}
-                            <JuejinRoundAvatar avatarSrc="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"></JuejinRoundAvatar>
+                            <div className="flex flex-shrink-0 flex-grow-0 justify-end">
+                                <div className="flex items-center justify-center" >
+
+
+                                    <div style={{ transition: 'width .3s', background: '#f4f5f5', color: '#86909c', padding: '0.6rem 0 0.6rem 1rem', height: '55%' }} className="flex-grow-0 w-44	text-sm flex items-center justify-between mx-9 hover:w-96">
+                                        <div>探索稀土掘金</div>
+                                        <div className="mr-2">
+                                            <img src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/8f68a2223e9650f14d6e6781cdcd717a.svg" alt="搜索" className="cursor-pointer" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <JuejinRoundAvatar avatarSrc="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"></JuejinRoundAvatar>
+                            </div>
+
                         </div>
 
                         <div className="flex overflow-x-auto border-b border-gray-200">

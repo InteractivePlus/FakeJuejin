@@ -5,7 +5,7 @@ import { Fragment, useRef, useState, useEffect } from "react";
 
 import Nav from "../components/juejinNav";
 import JuejinArticleList from "../components/juejinArticleList";
-
+import JuejinTagList from "../components/juejinTagList";
 import { TimerView, myTimer } from "../store/historyArticleStore";
 
 import { resetIdCounter } from "react-tabs";
@@ -19,6 +19,7 @@ const Home=()=> {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Nav />
+            <JuejinTagList />
             {/* <TimerView timer={myTimer} /> */}
             <JuejinArticleList />
         </div>

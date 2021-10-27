@@ -36,7 +36,7 @@ export default function Post(props) {
     }, [articleid]);
 
     return (
-        <div>
+        <div className="font-juejin">
             <Nav />
             <JuejinCenterContainer>
                 {isEmpty(articleFullInfo) ? (
