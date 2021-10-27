@@ -175,17 +175,17 @@ const JuejinArticleList = () => {
                 <TabList>
                     <div className="fixed bottom-0 md:sticky order-last md:order-first flex flex-1 py-4 px-6 border-b border-gray-200 w-full bg-white">
                         {/* <div className="hidden md:flex"> */}
-                            <div className="flex flex-1 flex-row items-center justify-around md:justify-start md:divide-x divide-gray-300 text-sm ">
-                                <ArticleViewFirstTab isSelected={tabIndex == 0}>
-                                    热门
-                                </ArticleViewFirstTab>
-                                <ArticleViewOtherTab isSelected={tabIndex == 1}>
-                                    最新
-                                </ArticleViewOtherTab>
-                                <ArticleViewOtherTab isSelected={tabIndex == 2}>
-                                    历史
-                                </ArticleViewOtherTab>
-                            </div>
+                        <div className="flex flex-1 flex-row items-center justify-around md:justify-start md:divide-x divide-gray-300 text-sm z-10">
+                            <ArticleViewFirstTab isSelected={tabIndex == 0}>
+                                热门
+                            </ArticleViewFirstTab>
+                            <ArticleViewOtherTab isSelected={tabIndex == 1}>
+                                最新
+                            </ArticleViewOtherTab>
+                            <ArticleViewOtherTab isSelected={tabIndex == 2}>
+                                历史
+                            </ArticleViewOtherTab>
+                        </div>
                         {/* </div> */}
                         {/* <div className="flex md:hidden">
                             <div className="flex flex-1 flex-row items-center justify-around divide-gray-300 text-sm ">
@@ -196,33 +196,39 @@ const JuejinArticleList = () => {
                         </div> */}
                     </div>
                 </TabList>
-                <TabPanel>
-                    {/* 热门 */}
-                    <ul className="order-first md:order-last flex flex-col leading-7 w-full">
-                        {/* <JuejinArticleListItem
+                <div className="">
+                    <TabPanel>
+                        {/* 热门 */}
+                        <ul className="order-first md:order-last flex flex-col leading-7 w-full">
+                            {/* <JuejinArticleListItem
                         author="测试用户"
                         date="1626924865"
                         title="【小知识】测试标题测试标题测试标题测试标题"
                         contentAbstract="测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本"
                         coverImg="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bd2683efa3fa43deb13fb91c0cbd4b15~tplv-k3u1fbpfcp-no-mark:240:240:240:160.awebp"
                     /> */}
-                        <DynamicList dataInterface={getHotArticlesInterface} />
-                    </ul>
-                </TabPanel>
-                <TabPanel>
-                    {/* 最新 */}
-                    <ul className="order-first md:order-last flex flex-col leading-7 w-full">
-                        <DynamicList dataInterface={getNewArticlesInterface} />
-                    </ul>
-                </TabPanel>
-                <TabPanel>
-                    {/* 历史 */}
-                    <ul className="order-first md:order-last flex flex-col leading-7 w-full">
-                        <DynamicList
-                            dataInterface={getHistoryArticlesInterface}
-                        />
-                    </ul>
-                </TabPanel>
+                            <DynamicList
+                                dataInterface={getHotArticlesInterface}
+                            />
+                        </ul>
+                    </TabPanel>
+                    <TabPanel>
+                        {/* 最新 */}
+                        <ul className="order-first md:order-last flex flex-col leading-7 w-full">
+                            <DynamicList
+                                dataInterface={getNewArticlesInterface}
+                            />
+                        </ul>
+                    </TabPanel>
+                    <TabPanel>
+                        {/* 历史 */}
+                        <ul className="order-first md:order-last flex flex-col leading-7 w-full">
+                            <DynamicList
+                                dataInterface={getHistoryArticlesInterface}
+                            />
+                        </ul>
+                    </TabPanel>
+                </div>
             </Tabs>
         </JuejinCenterContainer>
     );

@@ -3,6 +3,40 @@ import { Fragment, useRef, useState, useEffect } from "react";
 
 import JuejinRoundAvatar from "./juejinRoundAvatar";
 
+import { Tabs, TabList, Tab, TabPanel, resetIdCounter } from "react-tabs";
+
+import { isEmpty } from "../utils/commonutils";
+
+import { getCategories } from "../api";
+
+import JuejinTagList from "./juejinTagList";
+
+// 自定义类别tab
+const CategoryTab = (props) => {
+    const { isSelected, children } = props;
+    return (
+        <Tab>
+            <div
+                className={
+                    "cursor-pointer flex-1 px-4 " +
+                    (isSelected
+                        ? "text-juejin-focus-text-blue"
+                        : "text-gray-400")
+                }>
+                {children}
+            </div>
+        </Tab>
+    );
+};
+CategoryTab.tabsRole = "Tab";
+
+// 自定义类别TabPanel
+const CategoryTabPanel = (props) => {
+    const { children, ...otherProps } = props;
+    return <TabPanel {...otherProps}>{children}</TabPanel>;
+};
+CategoryTabPanel.tabsRole = "TabPanel";
+
 const Menu = () => (
     <div
         style={{
@@ -17,16 +51,7 @@ const Menu = () => (
             className="flex flex-col items-center">
             <li className="text-juejinactive cursor-pointer flex-1">首页</li>
             <li className="hover:text-juejinactive cursor-pointer flex-1">
-                你妈
-            </li>
-            <li className="hover:text-juejinactive cursor-pointer flex-1">
-                你爷
-            </li>
-            <li className="hover:text-juejinactive cursor-pointer flex-1">
-                你奶
-            </li>
-            <li className="hover:text-juejinactive cursor-pointer flex-1">
-                二奶
+                暂无
             </li>
         </ul>
     </div>
@@ -34,10 +59,26 @@ const Menu = () => (
 
 const Nav = () => {
     const [showDropdown, setShowDropdown] = useState(false);
-    //const [use] = useState(false);
     const dropdown = useRef(null);
+    const [categoriesList, setCategoriesList] = useState([]); //一级类别tab，纯数组形式
 
-    useEffect(() => {
+    // 用于切换一级类别tab
+    const [tabIndex, setTabIndex] = React.useState(0);
+
+    React.useEffect(() => {
+        // 获取类别
+        getCategories().then(
+            (response) => {
+                console.log(response.data);
+                setCategoriesList(response.data["categories"]);
+            },
+            (err) => {}
+        );
+        // 默认为0
+        // setCurrentCategory(0);
+    }, []);
+
+    React.useEffect(() => {
         if (!showDropdown) return;
         function handleClick(event) {
             dropdown.current && !dropdown.current.contains(event.target)
@@ -48,90 +89,100 @@ const Nav = () => {
         }
     }, [showDropdown]);
 
-    const clickSearch = (e) => {
+    const clickSearch = (e) => {};
 
-    }
     return (
-        <div className="sticky top-0 mb-4 border-t border-white bg-white flex-none z-50">
+        <div className="sticky top-0 mb-4 border-t flex-none z-50">
             <div className="w-full mx-auto">
                 <nav>
                     <div className="mx-auto">
-                        <div className="flex justify-between border-b border-gray-200 px-4">
-                            <div className="flex space-x-7">
-                                <div className="order-1">
-                                    {/* <!-- Website Logo --> */}
-                                    <a
-                                        href="#"
-                                        className="flex items-center py-4 md:px-2">
-                                        <img
-                                            className="w-auto h-6 md:block hidden"
-                                            src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/7abc2b532f725d394feaf0141547ade7.svg"
-                                        />
-                                        <img
-                                            className="w-auto h-6 md:hidden"
-                                            src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/6bdafd801c878b10edb5fed5d00969e9.svg"
-                                        />
-                                    </a>
-                                </div>
-                                {/* <!-- Primary Navbar items --> */}
-                                <div className="hidden md:flex items-center space-x-1 order-3">
-                                    {/* <div className="flex-auto flex items-center ml-3"> */}
-                                    <ul className="flex-grow flex text-juejinnav">
-                                        <li className="flex-1 px-5 text-juejinactive">
-                                            <a className="cursor-pointer">
-                                                首页
-                                            </a>
-                                        </li>
+                        <div className="border-white bg-white ">
+                            <div className="flex justify-between border-b border-gray-200 px-4">
+                                <div className="flex space-x-7">
+                                    <div className="order-1">
+                                        {/* Logo */}
+                                        <a
+                                            href="#"
+                                            className="flex items-center py-4 md:px-2">
+                                            <img
+                                                className="w-auto h-6 md:block hidden"
+                                                src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/7abc2b532f725d394feaf0141547ade7.svg"
+                                            />
+                                            <img
+                                                className="w-auto h-6 md:hidden"
+                                                src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/6bdafd801c878b10edb5fed5d00969e9.svg"
+                                            />
+                                        </a>
+                                    </div>
+                                    {/* <!-- Primary Navbar items --> */}
+                                    <div className="hidden md:flex items-center space-x-1 order-3">
+                                        {/* <div className="flex-auto flex items-center ml-3"> */}
+                                        <ul className="flex-grow flex text-juejinnav">
+                                            <li className="flex-1 px-5 text-juejinactive">
+                                                <a className="cursor-pointer">
+                                                    首页
+                                                </a>
+                                            </li>
 
-                                        <li className="flex-1 px-5 hover:text-juejinactive">
-                                            <a className="cursor-pointer">
-                                                暂无
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    {/* </div> */}
-                                </div>
-
-                                {/* <!-- Mobile menu button --> */}
-                                <div
-                                    onClick={() => setShowDropdown((b) => !b)}
-                                    className="md:hidden flex items-center order-2 cursor-pointer text-juejinactive">
-                                    <span>首页</span>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-5 w-5"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-
-                                    {showDropdown ? <Menu /> : null}
-                                </div>
-                            </div>
-
-                            {/* <!-- Secondary Navbar items --> */}
-                            <div className="flex flex-shrink-0 flex-grow-0 justify-end">
-                                <div className="flex items-center justify-center" >
-
-
-                                    <div style={{ transition: 'width .3s', background: '#f4f5f5', color: '#86909c', padding: '0.6rem 0 0.6rem 1rem', height: '55%' }} className="flex-grow-0 w-44	text-sm flex items-center justify-between mx-9 hover:w-96">
-                                        <div>探索稀土掘金</div>
-                                        <div className="mr-2">
-                                            <img src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/8f68a2223e9650f14d6e6781cdcd717a.svg" alt="搜索" className="cursor-pointer" />
-                                        </div>
+                                            <li className="flex-1 px-5 hover:text-juejinactive">
+                                                <a className="cursor-pointer">
+                                                    暂无
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        {/* </div> */}
                                     </div>
 
+                                    {/* <!-- Mobile menu button --> */}
+                                    <div
+                                        onClick={() =>
+                                            setShowDropdown((b) => !b)
+                                        }
+                                        className="md:hidden flex items-center order-2 cursor-pointer text-juejinactive">
+                                        <span>首页</span>
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-5 w-5"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
+                                            />
+                                        </svg>
+
+                                        {showDropdown ? <Menu /> : null}
+                                    </div>
                                 </div>
-                                <JuejinRoundAvatar avatarSrc="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"></JuejinRoundAvatar>
+
+                                {/* <!-- Secondary Navbar items --> */}
+                                <div className="flex flex-shrink-0 flex-grow-0 justify-end">
+                                    <div className="flex items-center justify-center">
+                                        <div
+                                            style={{
+                                                transition: "width .3s",
+                                                background: "#f4f5f5",
+                                                color: "#86909c",
+                                                padding: "0.6rem 0 0.6rem 1rem",
+                                                height: "55%",
+                                            }}
+                                            className="flex-grow-0 w-44	text-sm flex items-center justify-between mx-9 hover:w-96">
+                                            <div>探索稀土掘金</div>
+                                            <div className="mr-2">
+                                                <img
+                                                    src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/8f68a2223e9650f14d6e6781cdcd717a.svg"
+                                                    alt="搜索"
+                                                    className="cursor-pointer"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <JuejinRoundAvatar avatarSrc="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"></JuejinRoundAvatar>
+                                </div>
                             </div>
 
-                        </div>
-
-                        <div className="flex overflow-x-auto border-b border-gray-200">
+                            {/* <div className="flex overflow-x-auto border-b border-gray-200">
                             <ul className="flex-row inline-flex text-juejinnav h-10 items-center pl-4">
                                 <li className="flex-1 px-4">
                                     <a className="cursor-pointer">推荐</a>
@@ -144,41 +195,48 @@ const Nav = () => {
                                     <a className="cursor-pointer">前端</a>
                                 </li>
                             </ul>
+                        </div> */}
                         </div>
+                        <Tabs
+                            selectedIndex={tabIndex}
+                            onSelect={(index) => setTabIndex(index)}>
+                            <TabList>
+                                <div className="flex overflow-x-auto border-b border-gray-200 bg-white z-0">
+                                    <div className="flex-row inline-flex text-juejinnav h-10 items-center pl-4">
+                                        {/* 生成一级类别 */}
+                                        {categoriesList.map((item, index) => {
+                                            return (
+                                                <CategoryTab
+                                                    isSelected={
+                                                        tabIndex == index
+                                                    }>
+                                                    {item["category_name"]}
+                                                </CategoryTab>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </TabList>
+                            <div className="bg-transparent block">
+                                {/* <CategoryTabPanel>1</CategoryTabPanel> */}
+                                {/* 这部分的逻辑是，先遍历categoriesList，如果有children（即二级子类别）
+                                则再遍历二级子类别，提取出相关信息并生成 */}
+                                {categoriesList.map((item) => {
+                                    return (
+                                        <CategoryTabPanel>
+                                            <JuejinTagList
+                                                mainCategory={
+                                                    item["category_id"]
+                                                }
+                                                subCategories={
+                                                    item["children"]
+                                                }></JuejinTagList>
+                                        </CategoryTabPanel>
+                                    );
+                                })}
+                            </div>
+                        </Tabs>
                     </div>
-                    {/* <!-- mobile menu --> */}
-                    {/* <div className="hidden mobile-menu">
-                        <ul className="">
-                            <li className="active">
-                                <a
-                                    href="index.html"
-                                    className="block text-sm px-2 py-4 text-white bg-green-500 font-semibold">
-                                    Home
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#services"
-                                    className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">
-                                    Services
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#about"
-                                    className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">
-                                    About
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#contact"
-                                    className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">
-                                    Contact Us
-                                </a>
-                            </li>
-                        </ul>
-                    </div> */}
                 </nav>
             </div>
         </div>

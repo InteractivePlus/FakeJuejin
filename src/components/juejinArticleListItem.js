@@ -89,7 +89,7 @@ const JuejinArticleListItem = (props) => {
                                 (coverImg == "" ? "hidden" : "")
                             }>
                             <img
-                                // className="ml-6 w-32"
+                                className="ml-6"
                                 style={{width:"120px",height:"80px"}}
                                 // src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bd2683efa3fa43deb13fb91c0cbd4b15~tplv-k3u1fbpfcp-no-mark:240:240:240:160.awebp"
                                 src={coverImg}
