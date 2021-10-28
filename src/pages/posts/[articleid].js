@@ -46,7 +46,7 @@ export default function Post(props) {
                         <JuejinArticleContentItem
                             articleFullInfo={articleFullInfo}
                         />
-                        <JuejinArticleCommentItem></JuejinArticleCommentItem>
+                        <JuejinArticleCommentItem articleId={articleid}></JuejinArticleCommentItem>
                     </ul>
                 )}
             </JuejinCenterContainer>

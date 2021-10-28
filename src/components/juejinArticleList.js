@@ -63,7 +63,7 @@ ArticleViewOtherTab.tabsRole = "Tab";
  */
 const DynamicList = (props) => {
     const { dataInterface } = props;
-    const [Waiting, setWaiting] = React.useState(false);
+    //const [Waiting, setWaiting] = React.useState(false);
 
     let [dynamicList, setDynamicList] = React.useState([]);
     let [listOffset, setListOffset] = React.useState(0);

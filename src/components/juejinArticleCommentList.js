@@ -6,85 +6,148 @@ import JuejinArticleCommentBlock from "./juejinArticleCommentMainBlock";
 import JuejinArticleCommentReplyContainer from "./juejinArticleCommentReplyBlock";
 import JuejinArticleCommentReplyBlock from "./juejinArticleCommentReply";
 import { useScrollBottom } from "../utils/scrollContext";
+import { getCommentsByArticleId } from "../api";
+import { getTimeStampDesc } from "../utils/timeUtils";
 
-/*
+import { waitUntil } from "../utils/timeUtils";
+
 const DynamicCommentList = (props) => {
-    const { dataInterface } = props;
-
-    let [dynamicList, setDynamicList] = React.useState([]);
     let [listOffset, setListOffset] = React.useState(0);
 
+    const { dataInterface } = props;
+    let [dynamicList, setDynamicList] = React.useState([]);
+    let [replyList, setReplyList] = React.useState([])
     const { isScrollToBottom } = useScrollBottom();
 
+
     React.useEffect(() => {
-        console.log(dataInterface(listOffset));
         dataInterface(listOffset).then(
             (response) => {
                 console.log(response.data);
-                setDynamicList(dynamicList.concat(response.data["articles"]));
+                setDynamicList(dynamicList.concat(response.data["comments"]));
+
                 setListOffset(listOffset + 10);
             },
-            (err) => {}
+            (err) => { }
         );
     }, []);
 
     // 如果滚到底部就调用接口更新数据
     React.useEffect(() => {
         if (isScrollToBottom) {
-            dataInterface(listOffset).then(
-                (response) => {
-                    console.log(response.data);
-                    setDynamicList(
-                        dynamicList.concat(response.data["articles"])
-                    );
-                    setListOffset(listOffset + 10);
-                },
-                (err) => {}
-            );
+            waitUntil(500).then(
+                () => {
+                    dataInterface(listOffset).then(
+                        (response) => {
+                            console.log(response.data);
+                            setDynamicList(
+                                dynamicList.concat(response.data["comments"])
+                            );
+                            setListOffset(listOffset + 10);
+                        },
+                        (err) => { }
+                    )
+                }
+            )
+
         }
     }, [isScrollToBottom]);
 
-    let handleItemClick = async (item) => {
-        console.log(item);
-        historyArticleStore.add(item);
-        console.log(historyArticleStore.historyArticleList);
-    };
-
     return dynamicList.map((item) => {
         return (
-            <JuejinArticleListItem
-                key={item["article_id"]}
-                articleId={item["article_id"]}
-                author={item["author_user_info"]["user_name"]}
-                date={item["article_info"]["ctime"]}
-                title={item["article_info"]["title"]}
-                contentAbstract={item["article_info"]["brief_content"]}
-                coverImg={item["article_info"]["cover_image"]}
-                viewCount={item["article_info"]["view_count"]}
-                diggCount={item["article_info"]["digg_count"]}
-                commentCount={item["article_info"]["comment_count"]}
-                onClick={() => {
-                    handleItemClick(item);
+            <JuejinArticleCommentBlock
+                authorName={item["user_info"]["user_name"]}
+                avatarSrc={item["user_info"]["avatar_large"]}
+                content={item["comment_info"]["comment_content"]}
+                authorJob={item["user_info"]["job_title"]}
+                commentTime={getTimeStampDesc(item["comment_info"]["ctime"])}
+                commentCount={item["comment_info"]["reply_count"]}
+                like={item["comment_info"]["digg_count"]}
+            >
+                {() => {
+                    if (item['reply_infos'].length > 0) {
+                        return (
+                            <JuejinArticleCommentReplyContainer>
+                                {(() => {
+                                    return item['reply_infos'].map((reply) => {
+                                        <JuejinArticleCommentReplyBlock
+                                            authorName={reply["user_info"]["user_name"]}
+                                            avatarSrc={reply["user_info"]["avatar_large"]}
+                                            content={reply["reply_info"]["reply_content"]}
+                                            commentTime={getTimeStampDesc(reply["reply_info"]["ctime"])}
+                                            commentCount="评论"
+                                            like={reply["reply_info"]["digg_count"]}
+                                        >
+
+                                        </JuejinArticleCommentReplyBlock>
+
+                                    })
+                                })}
+                            </JuejinArticleCommentReplyContainer>
+
+
+
+                        )
+                    }
+
                 }}
-            />
+                </JuejinArticleCommentBlock>
+
+
+
+
+
+
+
         );
     });
-};
-*/
+
+
+
+}
+
+
+
 const JuejinArticleCommentItem = (props) => {
-    const { children } = props;
+    const { children, articleId } = props;
 
     const { isScrollToBottom } = useScrollBottom();
+
+    let getHotCommentInterface = (articleId, listOffset) => {
+        return new Promise((resolve, reject) => {
+            getCommentsByArticleId(articleId, listOffset).then(
+                (response) => {
+                    resolve(response);
+                },
+                (err) => {
+                    reject(err);
+                }
+            );
+        });
+    };
+
+    let getNewCommentInterface = (articleId, listOffset) => {
+        return new Promise((resolve, reject) => {
+            getCommentsByArticleId(articleId, listOffset, "new").then(
+                (response) => {
+                    resolve(response);
+                },
+                (err) => {
+                    reject(err);
+                }
+            );
+        });
+    };
 
     React.useEffect(() => {
         if (isScrollToBottom) {
 
+            console.log(getCommentsByArticleId(articleId, 10))
 
-            
         }
     }, [isScrollToBottom]);
 
-    
+
 
     return (
         <div className="px-6 py-8">
@@ -104,27 +167,9 @@ const JuejinArticleCommentItem = (props) => {
                 </div>
             </div>
             <div className="mt-5">
-                <JuejinArticleCommentBlock
-                    authorName="我是你爸"
-                    authorJob="二营长"
-                    avatarSrc="https://avatars.githubusercontent.com/u/22854837?v=4"
-                    content="儿啊，你快回来吧，父亲知错了dasdasdasdsadasd32r23d32d23d3d3qd3d23qd23d2d23qd23dq32dq3dw3d2d323qd23dq23ddawedw3dewd3dewewfedwedwedwedwed"
-                    like="999+"
-                    commentCount="999+"
-                    commentTime="114514小时前"
-                >
-                    <JuejinArticleCommentReplyContainer>
-                        <JuejinArticleCommentReplyBlock
-                            authorName="我是你爸"
-                            avatarSrc="https://avatars.githubusercontent.com/u/22854837?v=4"
-                            content="儿啊，你快回来吧，父亲知错了dasdasdasdsadasd32r23d32d23d3d3qd3d23qd23d2d23qd23dq32dq3dw3d2d323qd23dq23ddawedw3dewd3dewewfedwedwedwedwed"
-                            like="999+"
-                            commentCount="999+"
-                            commentTime="114514小时前"
-                        >
-                        </JuejinArticleCommentReplyBlock>
-                    </JuejinArticleCommentReplyContainer>
-                </JuejinArticleCommentBlock>
+                <DynamicCommentList dataInterface={getHotCommentInterface}>
+
+                </DynamicCommentList>
             </div>
         </div>
     );
