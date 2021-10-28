@@ -1,7 +1,6 @@
 import React from "react";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, toJS } from "mobx";
 import { observer } from "mobx-react";
-
 
 class HistoryArticleStore {
     historyArticleList = { data: { articles: [] } };
@@ -15,7 +14,7 @@ class HistoryArticleStore {
     }
 
     getData() {
-        return this.historyArticleList;
+        return toJS(this.historyArticleList);
     }
 
     reset() {
@@ -26,9 +25,9 @@ class HistoryArticleStore {
 export const historyArticleStore = new HistoryArticleStore();
 
 
-export const HistoryArticleView = observer(({ historyStore }) => (
-    <div>
-        {historyStore.historyArticleList}
-    </div>
-));
+// export const HistoryArticleView = observer(({ historyStore }) => (
+//     <div>
+//         {historyStore.historyArticleList}
+//     </div>
+// ));
 

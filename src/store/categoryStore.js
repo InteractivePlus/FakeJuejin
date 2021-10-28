@@ -1,28 +1,63 @@
 import React from "react";
-import { makeAutoObservable } from "mobx";
 import { observer } from "mobx-react";
-
+import {
+    toJS,
+    makeAutoObservable,
+    makeObservable,
+    observable,
+    computed,
+    action,
+} from "mobx";
 
 class CategoryStore {
-    categoryList = {};
-    currentMainCategory = 0;
-    currentCategory = 0;
+    categoryList = []; //记录总类别
+    mainCategory = 0; //当前选中的一级类别
+    currentCategory = 0; //当前选中最终类别（一级或二级）
 
     constructor() {
-        makeAutoObservable(this);
+        // makeAutoObservable(this);
+        makeObservable(this, {
+            categoryList: observable,
+            mainCategory: observable,
+            currentCategory: observable,
+            setCurrentCategory: action,
+            setMainCategory: action,
+            setCategoryList: action,
+            getCurrentCategory: computed,
+            getMainCategory: computed,
+            getCategoryList: computed,
+        });
     }
 
-    add(categoryData) {
-        this.categoryList.push(categoryData);
+    
+    setCurrentCategory(categoryId) {
+        this.currentCategory = categoryId;
+    }
+
+    setMainCategory(categoryId) {
+        this.mainCategory = categoryId;
+        console.log('mmm',this.mainCategory)
+    }
+
+    setCategoryList(list) {
+        this.categoryList = list;
+    }
+
+    get getCurrentCategory() {
+        return this.currentCategory;
+    }
+
+    get getMainCategory() {
+        return this.mainCategory;
+    }
+
+    get getCategoryList() {
+        return toJS(this.categoryList);
     }
 }
 
 export const categoryStore = new CategoryStore();
 
-
-// export const HistoryArticleView = observer(({ historyStore }) => (
-//     <div>
-//         {historyStore.historyArticleList}
-//     </div>
-// ));
-
+export const CategoryView = observer(({ categoryStore }) => (
+    <div>{categoryStore.categoryList}</div>
+));
