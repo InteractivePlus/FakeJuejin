@@ -18,8 +18,7 @@ const JuejinArticleListItem = (props) => {
         coverImg,
         viewCount,
         diggCount,
-        commentCount,
-        Waiting
+        commentCount
     } = props;
 
     const { onClick } = props;

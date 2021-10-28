@@ -122,7 +122,6 @@ const DynamicList = (props) => {
                 viewCount={item["article_info"]["view_count"]}
                 diggCount={item["article_info"]["digg_count"]}
                 commentCount={item["article_info"]["comment_count"]}
-                Waiting={Waiting}
                 onClick={() => {
                     handleItemClick(item);
                 }}
