@@ -16,9 +16,8 @@ const DynamicCommentList = (props) => {
 
     const { dataInterface } = props;
     let [dynamicList, setDynamicList] = React.useState([]);
-    let [replyList, setReplyList] = React.useState([])
+    let [replyList, setReplyList] = React.useState([]);
     const { isScrollToBottom } = useScrollBottom();
-
 
     React.useEffect(() => {
         dataInterface(listOffset).then(
@@ -28,32 +27,30 @@ const DynamicCommentList = (props) => {
 
                 setListOffset(listOffset + 10);
             },
-            (err) => { }
+            (err) => {}
         );
     }, []);
 
     // 如果滚到底部就调用接口更新数据
     React.useEffect(() => {
         if (isScrollToBottom) {
-            waitUntil(500).then(
-                () => {
-                    dataInterface(listOffset).then(
-                        (response) => {
-                            console.log(response.data);
-                            setDynamicList(
-                                dynamicList.concat(response.data["comments"])
-                            );
-                            setListOffset(listOffset + 10);
-                        },
-                        (err) => { }
-                    )
-                }
-            )
-
+            waitUntil(500).then(() => {
+                dataInterface(listOffset).then(
+                    (response) => {
+                        console.log(response.data);
+                        setDynamicList(
+                            dynamicList.concat(response.data["comments"])
+                        );
+                        setListOffset(listOffset + 10);
+                    },
+                    (err) => {}
+                );
+            });
         }
     }, [isScrollToBottom]);
 
     return dynamicList.map((item) => {
+        console.log(item);
         return (
             <JuejinArticleCommentBlock
                 authorName={item["user_info"]["user_name"]}
@@ -62,51 +59,31 @@ const DynamicCommentList = (props) => {
                 authorJob={item["user_info"]["job_title"]}
                 commentTime={getTimeStampDesc(item["comment_info"]["ctime"])}
                 commentCount={item["comment_info"]["reply_count"]}
-                like={item["comment_info"]["digg_count"]}
-            >
-                {() => {
-                    if (item['reply_infos'].length > 0) {
-                        return (
-                            <JuejinArticleCommentReplyContainer>
-                                {(() => {
-                                    return item['reply_infos'].map((reply) => {
-                                        <JuejinArticleCommentReplyBlock
-                                            authorName={reply["user_info"]["user_name"]}
-                                            avatarSrc={reply["user_info"]["avatar_large"]}
-                                            content={reply["reply_info"]["reply_content"]}
-                                            commentTime={getTimeStampDesc(reply["reply_info"]["ctime"])}
-                                            commentCount="评论"
-                                            like={reply["reply_info"]["digg_count"]}
-                                        >
-
-                                        </JuejinArticleCommentReplyBlock>
-
-                                    })
-                                })}
-                            </JuejinArticleCommentReplyContainer>
-
-
-
-                        )
-                    }
-
-                }}
-                </JuejinArticleCommentBlock>
-
-
-
-
-
-
-
+                like={item["comment_info"]["digg_count"]}>
+                {
+                    item["reply_infos"] ? (
+                    <JuejinArticleCommentReplyContainer>
+                        {item["reply_infos"].map((reply) => {
+                            return <JuejinArticleCommentReplyBlock
+                                authorName={reply["user_info"]["user_name"]}
+                                avatarSrc={reply["user_info"]["avatar_large"]}
+                                content={reply["reply_info"]["reply_content"]}
+                                commentTime={getTimeStampDesc(
+                                    reply["reply_info"]["ctime"]
+                                )}
+                                commentCount="评论"
+                                like={
+                                    reply["reply_info"]["digg_count"]
+                                }></JuejinArticleCommentReplyBlock>;
+                        })}
+                    </JuejinArticleCommentReplyContainer>
+                ) : (
+                    <></>
+                )}
+            </JuejinArticleCommentBlock>
         );
     });
-
-
-
-}
-
-
+};
 
 const JuejinArticleCommentItem = (props) => {
     const { children, articleId } = props;
@@ -141,13 +118,9 @@ const JuejinArticleCommentItem = (props) => {
 
     React.useEffect(() => {
         if (isScrollToBottom) {
-
-            console.log(getCommentsByArticleId(articleId, 10))
-
+            console.log(getCommentsByArticleId(articleId, 10));
         }
     }, [isScrollToBottom]);
-
-
 
     return (
         <div className="px-6 py-8">
@@ -167,9 +140,8 @@ const JuejinArticleCommentItem = (props) => {
                 </div>
             </div>
             <div className="mt-5">
-                <DynamicCommentList dataInterface={getHotCommentInterface}>
-
-                </DynamicCommentList>
+                <DynamicCommentList
+                    dataInterface={getHotCommentInterface}></DynamicCommentList>
             </div>
         </div>
     );
