@@ -1,3 +1,7 @@
+import React from "react";
+
+
+
 export function getTimeStampDesc(timespan) {
     // 秒级时间戳补足0转毫秒级
     if (timespan.length < 13) {
@@ -64,4 +68,4 @@ export function convertTimeStampToWord(timespan) {
     return `${year}年${String(month).padStart(2,"0")}月${day}日`;
 }
 
-
+export const waitUntil = ms => new Promise(resolve => setTimeout(resolve, ms));

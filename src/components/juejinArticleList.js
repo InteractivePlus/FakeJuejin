@@ -13,7 +13,7 @@ import { historyArticleStore } from "../store/historyArticleStore";
 import { Tabs, TabList, Tab, TabPanel, resetIdCounter } from "react-tabs";
 
 import { isEmpty } from "../utils/commonutils";
-
+import { waitUntil } from "../utils/timeUtils";
 // import mobx from 'mobx'
 
 import { toJS } from "mobx";
@@ -64,11 +64,10 @@ ArticleViewOtherTab.tabsRole = "Tab";
 const DynamicList = (props) => {
     const { dataInterface } = props;
     const [Waiting, setWaiting] = React.useState(false);
-    const delay = ms => new Promise(res => setTimeout(res, ms));
 
     let [dynamicList, setDynamicList] = React.useState([]);
     let [listOffset, setListOffset] = React.useState(0);
-    
+
     const { isScrollToBottom } = useScrollBottom();
 
     React.useEffect(() => {
@@ -84,20 +83,21 @@ const DynamicList = (props) => {
     }, []);
 
     // 如果滚到底部就调用接口更新数据
-    React.useEffect(async () => {
+    React.useEffect(() => {
         if (isScrollToBottom) {
-            setWaiting(true)
-            await delay(600)
-            setWaiting(false)
-            dataInterface(listOffset).then(
-                (response) => {
-                    console.log(response.data);
-                    setDynamicList(
-                        dynamicList.concat(response.data["articles"])
-                    );
-                    setListOffset(listOffset + 10);
-                },
-                (err) => { }
+            waitUntil(500).then(
+                () => {
+                    dataInterface(listOffset).then(
+                        (response) => {
+                            console.log(response.data);
+                            setDynamicList(
+                                dynamicList.concat(response.data["articles"])
+                            );
+                            setListOffset(listOffset + 10);
+                        },
+                        (err) => { }
+                    )
+                }
             )
 
         }
@@ -127,7 +127,7 @@ const DynamicList = (props) => {
                     handleItemClick(item);
                 }}
             />
-            
+
         );
     });
 };
