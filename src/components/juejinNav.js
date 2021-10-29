@@ -11,6 +11,11 @@ import { getCategories } from "../api";
 
 import JuejinTagList from "./juejinTagList";
 
+// import { categoryStore } from "../store/categoryStore";
+
+
+import { observer } from "mobx-react";
+
 // 自定义类别tab
 const CategoryTab = (props) => {
     const { isSelected, children } = props;
@@ -61,7 +66,7 @@ const Menu = (props) => {
     )
 }
 
-const Nav = () => {
+const Nav = observer(({ categoryStore }) => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
     //This one must be global!!
@@ -79,6 +84,7 @@ const Nav = () => {
             (response) => {
                 console.log(response.data);
                 setCategoriesList(response.data["categories"]);
+                categoryStore.setCategoryList(response.data["categories"]);
             },
             (err) => { }
         );
@@ -205,25 +211,13 @@ const Nav = () => {
                                     <JuejinRoundAvatar avatarSrc="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"></JuejinRoundAvatar>
                                 </div>
                             </div>
-
-                            {/* <div className="flex overflow-x-auto border-b border-gray-200">
-                            <ul className="flex-row inline-flex text-juejinnav h-10 items-center pl-4">
-                                <li className="flex-1 px-4">
-                                    <a className="cursor-pointer">推荐</a>
-                                </li>
-
-                                <li className="flex-1 px-4">
-                                    <a className="cursor-pointer">后端</a>
-                                </li>
-                                <li className="flex-1 px-4">
-                                    <a className="cursor-pointer">前端</a>
-                                </li>
-                            </ul>
-                        </div> */}
                         </div>
                         <Tabs
                             selectedIndex={tabIndex}
-                            onSelect={(index) => setTabIndex(index)}>
+                            onSelect={(index) => {
+                                setTabIndex(index);
+                                categoryStore.setMainCategory(index);
+                            }}>
                             <TabList>
                                 <div className="flex overflow-x-auto border-b border-gray-200 bg-white z-0">
                                     <div className="flex-row inline-flex text-juejinnav h-10 items-center pl-4">
@@ -241,11 +235,15 @@ const Nav = () => {
                                     </div>
                                 </div>
                             </TabList>
-                            <div className="bg-transparent block">
-                                {/* <CategoryTabPanel>1</CategoryTabPanel> */}
-                                {/* 这部分的逻辑是，先遍历categoriesList，如果有children（即二级子类别）
+                            {/* 直接填充空白panel，有空再大改 */}
+                            {categoriesList.map((item, index) => {
+                                return <TabPanel></TabPanel>;
+                            })}
+                            {/* <div className="bg-transparent block"> */}
+                            {/* <CategoryTabPanel>1</CategoryTabPanel> */}
+                            {/* 这部分的逻辑是，先遍历categoriesList，如果有children（即二级子类别）
                                 则再遍历二级子类别，提取出相关信息并生成 */}
-                                {categoriesList.map((item) => {
+                            {/* {categoriesList.map((item) => {
                                     return (
                                         <CategoryTabPanel>
                                             <JuejinTagList
@@ -258,13 +256,13 @@ const Nav = () => {
                                         </CategoryTabPanel>
                                     );
                                 })}
-                            </div>
+                            </div> */}
                         </Tabs>
                     </div>
                 </nav>
             </div>
         </div>
     );
-};
+});
 
 export default Nav;

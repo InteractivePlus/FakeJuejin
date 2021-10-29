@@ -16,7 +16,8 @@ import { isEmpty } from "../utils/commonutils";
 import { waitUntil } from "../utils/timeUtils";
 // import mobx from 'mobx'
 
-import { toJS } from "mobx";
+import { observer } from "mobx-react";
+
 
 
 
@@ -61,35 +62,23 @@ ArticleViewOtherTab.tabsRole = "Tab";
  * @constructor
  * @param {function(Number):Promise<Object>} - 获取数据接口，传入偏移量。这是通用接口
  */
-const DynamicList = (props) => {
-    const { dataInterface } = props;
-    //const [Waiting, setWaiting] = React.useState(false);
-
-    let [dynamicList, setDynamicList] = React.useState([]);
+const DynamicList = observer((props) => {
+    const { dataInterface, categoryStore } = props;
+    const currentCategory = categoryStore.getCurrentCategory;
+    console.log("fccc", currentCategory);
     let [listOffset, setListOffset] = React.useState(0);
-
+    let [dynamicList, setDynamicList] = React.useState([]);
     const { isScrollToBottom } = useScrollBottom();
 
-    React.useEffect(() => {
-        console.log(dataInterface(listOffset));
-        dataInterface(listOffset).then(
-            (response) => {
-                console.log(response.data);
-                setDynamicList(dynamicList.concat(response.data["articles"]));
-                setListOffset(listOffset + 10);
-            },
-            (err) => { }
-        );
-    }, []);
 
     // 如果滚到底部就调用接口更新数据
     React.useEffect(() => {
         if (isScrollToBottom) {
             waitUntil(500).then(
                 () => {
-                    dataInterface(listOffset).then(
+                    dataInterface(currentCategory, listOffset).then(
                         (response) => {
-                            console.log(response.data);
+                           // console.log(response.data);
                             setDynamicList(
                                 dynamicList.concat(response.data["articles"])
                             );
@@ -102,6 +91,20 @@ const DynamicList = (props) => {
 
         }
     }, [isScrollToBottom]);
+
+
+    React.useEffect(() => {
+        setDynamicList([]);
+        dataInterface(currentCategory, listOffset).then(
+            (response) => {
+                // console.log(response.data);
+                setDynamicList(response.data["articles"]);
+                setListOffset(0);
+            },
+            (err) => {}
+        );
+    }, [currentCategory]);
+
 
     let handleItemClick = async (item) => {
         console.log(item);
@@ -132,12 +135,12 @@ const DynamicList = (props) => {
 };
 
 // 其实更应该叫ListTabView（？）
-const JuejinArticleList = () => {
+const JuejinArticleList = observer(({ categoryStore }) => {
     const [tabIndex, setTabIndex] = React.useState(0);
 
-    let getHotArticlesInterface = (listOffset) => {
+    let getHotArticlesInterface = (categoryId, listOffset) => {
         return new Promise((resolve, reject) => {
-            getArticles(0, "hot", listOffset, 10).then(
+            getArticles(categoryId,  "hot", listOffset, 10).then(
                 (response) => {
                     resolve(response);
                 },
@@ -148,9 +151,9 @@ const JuejinArticleList = () => {
         });
     };
 
-    let getNewArticlesInterface = (listOffset) => {
+    let getNewArticlesInterface = (categoryId, listOffset) => {
         return new Promise((resolve, reject) => {
-            getArticles(0, "new", listOffset, 10).then(
+            getArticles(categoryId,  "new", listOffset, 10).then(
                 (response) => {
                     resolve(response);
                 },
@@ -161,9 +164,9 @@ const JuejinArticleList = () => {
         });
     };
 
-    let getHistoryArticlesInterface = (listOffset) => {
+    let getHistoryArticlesInterface = (categoryId, listOffset) => {
         return new Promise((resolve, reject) => {
-            const list = toJS(historyArticleStore.historyArticleList);
+            const list = historyArticleStore.getData();
             console.log(list);
 
             if (list["data"]["articles"].length == 0) {
@@ -217,6 +220,7 @@ const JuejinArticleList = () => {
                         coverImg="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bd2683efa3fa43deb13fb91c0cbd4b15~tplv-k3u1fbpfcp-no-mark:240:240:240:160.awebp"
                     /> */}
                             <DynamicList
+                                categoryStore={categoryStore}
                                 dataInterface={getHotArticlesInterface}
                             />
                         </ul>
@@ -225,6 +229,7 @@ const JuejinArticleList = () => {
                         {/* 最新 */}
                         <ul className="order-first md:order-last flex flex-col leading-7 w-full">
                             <DynamicList
+                                categoryStore={categoryStore}
                                 dataInterface={getNewArticlesInterface}
                             />
                         </ul>
@@ -233,6 +238,7 @@ const JuejinArticleList = () => {
                         {/* 历史 */}
                         <ul className="order-first md:order-last flex flex-col leading-7 w-full">
                             <DynamicList
+                                categoryStore={categoryStore}
                                 dataInterface={getHistoryArticlesInterface}
                             />
                         </ul>

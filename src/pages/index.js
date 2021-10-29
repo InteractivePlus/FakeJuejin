@@ -10,6 +10,13 @@ import { TimerView, myTimer } from "../store/historyArticleStore";
 
 import { resetIdCounter } from "react-tabs";
 
+import JuejinTagList from "../components/juejinTagList";
+import { categoryStore } from "../store/categoryStore";
+
+
+import { Provider } from "mobx-react";
+
+
 const Home=()=> {
 
     return (
@@ -18,9 +25,11 @@ const Home=()=> {
                 <title>掘金</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Nav />
-            {/* <TimerView timer={myTimer} /> */}
-            <JuejinArticleList />
+            {/* <Provider categoryStore={categoryStore}> */}
+            <Nav categoryStore={categoryStore} />
+            <JuejinTagList categoryStore={categoryStore} />
+            {/* </Provider> */}
+            <JuejinArticleList categoryStore={categoryStore} />
         </div>
     );
 }
