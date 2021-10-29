@@ -197,8 +197,8 @@ const Nav = observer(({ categoryStore }) => {
                                                 padding: "0.6rem 0 0.6rem 1rem",
                                                 height: "55%",
                                             }}
-                                            className={`text-sm flex items-center justify-between mx-9 ${showSearch ? "border border-juejinactive" : ""}`}>
-                                            <input type="search" maxLength="32" placeholder={showSearch ? "搜索文章/小册/标签/用户" : "探索稀土掘金"} style={{ transition: "width .3s" }} className={`outline-none bg-transparent w-44 ${showSearch ? "lg:w-96" : ""}`} />
+                                            className={`text-sm flex items-center justify-between md:mx-9 mx-3 ${showSearch ? "border border-juejinactive" : ""}`}>
+                                            <input type="search" maxLength="32" placeholder={showSearch ? "搜索文章/小册/标签/用户" : "探索稀土掘金"} style={{ transition: "width .3s" }} className={`outline-none bg-transparent md:w-44 w-28 ${showSearch ? "lg:w-96" : ""}`} />
                                             <div className="mr-2">
                                                 <img
                                                     src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/8f68a2223e9650f14d6e6781cdcd717a.svg"
