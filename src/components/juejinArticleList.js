@@ -13,8 +13,13 @@ import { historyArticleStore } from "../store/historyArticleStore";
 import { Tabs, TabList, Tab, TabPanel, resetIdCounter } from "react-tabs";
 
 import { isEmpty } from "../utils/commonutils";
+import { waitUntil } from "../utils/timeUtils";
+// import mobx from 'mobx'
 
 import { observer } from "mobx-react";
+
+
+
 
 // 两个自定义tab
 const ArticleViewFirstTab = (props) => {
@@ -24,9 +29,7 @@ const ArticleViewFirstTab = (props) => {
             <div
                 className={
                     "cursor-pointer md:pr-4 " +
-                    (isSelected
-                        ? "text-juejin-focus-text-blue"
-                        : "text-gray-400")
+                    (isSelected ? "text-juejin-focus-text-blue" : "text-gray-400")
                 }>
                 {children}
             </div>
@@ -57,35 +60,39 @@ ArticleViewOtherTab.tabsRole = "Tab";
 /*
  * 动态列表
  * @constructor
- * @param {function(Number,Number):Promise<Object>} - 获取数据接口，传入类别id，偏移量。这是通用接口
+ * @param {function(Number):Promise<Object>} - 获取数据接口，传入偏移量。这是通用接口
  */
 const DynamicList = observer((props) => {
     const { dataInterface, categoryStore } = props;
     const currentCategory = categoryStore.getCurrentCategory;
     console.log("fccc", currentCategory);
-
-    let [dynamicList, setDynamicList] = React.useState([]);
     let [listOffset, setListOffset] = React.useState(0);
-
+    let [dynamicList, setDynamicList] = React.useState([]);
     const { isScrollToBottom } = useScrollBottom();
+
 
     // 如果滚到底部就调用接口更新数据
     React.useEffect(() => {
         if (isScrollToBottom) {
-            dataInterface(currentCategory, listOffset).then(
-                (response) => {
-                    // console.log(response.data);
-                    setDynamicList(
-                        dynamicList.concat(response.data["articles"])
-                    );
-                    setListOffset(listOffset + 10);
-                },
-                (err) => {}
-            );
+            waitUntil(500).then(
+                () => {
+                    dataInterface(currentCategory, listOffset).then(
+                        (response) => {
+                           // console.log(response.data);
+                            setDynamicList(
+                                dynamicList.concat(response.data["articles"])
+                            );
+                            setListOffset(listOffset + 10);
+                        },
+                        (err) => { }
+                    )
+                }
+            )
+
         }
     }, [isScrollToBottom]);
 
-    // 类别改变就初始化
+
     React.useEffect(() => {
         setDynamicList([]);
         dataInterface(currentCategory, listOffset).then(
@@ -97,6 +104,7 @@ const DynamicList = observer((props) => {
             (err) => {}
         );
     }, [currentCategory]);
+
 
     let handleItemClick = async (item) => {
         console.log(item);
@@ -121,9 +129,10 @@ const DynamicList = observer((props) => {
                     handleItemClick(item);
                 }}
             />
+
         );
     });
-});
+};
 
 // 其实更应该叫ListTabView（？）
 const JuejinArticleList = observer(({ categoryStore }) => {
@@ -131,7 +140,7 @@ const JuejinArticleList = observer(({ categoryStore }) => {
 
     let getHotArticlesInterface = (categoryId, listOffset) => {
         return new Promise((resolve, reject) => {
-            getArticles(categoryId, "hot", listOffset, 10).then(
+            getArticles(categoryId,  "hot", listOffset, 10).then(
                 (response) => {
                     resolve(response);
                 },
@@ -144,7 +153,7 @@ const JuejinArticleList = observer(({ categoryStore }) => {
 
     let getNewArticlesInterface = (categoryId, listOffset) => {
         return new Promise((resolve, reject) => {
-            getArticles(categoryId, "new", listOffset, 10).then(
+            getArticles(categoryId,  "new", listOffset, 10).then(
                 (response) => {
                     resolve(response);
                 },
@@ -161,8 +170,10 @@ const JuejinArticleList = observer(({ categoryStore }) => {
             console.log(list);
 
             if (list["data"]["articles"].length == 0) {
+                console.log("rere");
                 reject();
             } else {
+                console.log("res");
                 resolve(list);
             }
         });
@@ -187,6 +198,14 @@ const JuejinArticleList = observer(({ categoryStore }) => {
                                 历史
                             </ArticleViewOtherTab>
                         </div>
+                        {/* </div> */}
+                        {/* <div className="flex md:hidden">
+                            <div className="flex flex-1 flex-row items-center justify-around divide-gray-300 text-sm ">
+                                <ArticleViewFirstTab>热门</ArticleViewFirstTab>
+                                <ArticleViewOtherTab>最新</ArticleViewOtherTab>
+                                <ArticleViewOtherTab>历史</ArticleViewOtherTab>
+                            </div>
+                        </div> */}
                     </div>
                 </TabList>
                 <div className="">
@@ -228,7 +247,7 @@ const JuejinArticleList = observer(({ categoryStore }) => {
             </Tabs>
         </JuejinCenterContainer>
     );
-});
+};
 
 JuejinArticleList.getInitialProps = async (ctx) => {
     resetIdCounter();

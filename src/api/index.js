@@ -71,12 +71,17 @@ export async function getArticleById(articleId) {
  * @param {*} offset 分页参数参考 sql 的 offset 和 limit
  * @param {*} limit 同上
  */
-export async function getCommentsByArticleId(articleId, offset = 0, limit = 10) {
+export async function getCommentsByArticleId(articleId, offset = 0, sortBy = 'hot', limit = 10) {
+  const sortFunc = {
+    new: (a, b) => b.comment_info.ctime - a.comment_info.ctime,
+    hot: (a, b) => b.comment_info.digg_count - a.comment_info.digg_count,
+  }[sortBy];
+ let _commentSort = comments.sort(sortFunc)
   return {
     code: 0,
     data: {
       article_id: articleId,
-      comments: comments.slice(offset).slice(0, limit),
+      comments: _commentSort.slice(offset).slice(0, limit),
     },
     total: comments.length,
     has_more: offset + limit < comments.length,
