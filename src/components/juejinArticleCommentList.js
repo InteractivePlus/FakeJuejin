@@ -22,7 +22,7 @@ const DynamicCommentList = (props) => {
     React.useEffect(() => {
         dataInterface(listOffset).then(
             (response) => {
-                console.log(response.data);
+                // console.log(response.data);
                 setDynamicList(dynamicList.concat(response.data["comments"]));
 
                 setListOffset(listOffset + 10);
@@ -37,7 +37,7 @@ const DynamicCommentList = (props) => {
             waitUntil(500).then(() => {
                 dataInterface(listOffset).then(
                     (response) => {
-                        console.log(response.data);
+                        // console.log(response.data);
                         setDynamicList(
                             dynamicList.concat(response.data["comments"])
                         );
@@ -50,9 +50,9 @@ const DynamicCommentList = (props) => {
     }, [isScrollToBottom]);
 
     return dynamicList.map((item) => {
-        console.log(item);
         return (
             <JuejinArticleCommentBlock
+                key={item["comment_id"]}
                 authorName={item["user_info"]["user_name"]}
                 avatarSrc={item["user_info"]["avatar_large"]}
                 content={item["comment_info"]["comment_content"]}
@@ -60,23 +60,30 @@ const DynamicCommentList = (props) => {
                 commentTime={getTimeStampDesc(item["comment_info"]["ctime"])}
                 commentCount={item["comment_info"]["reply_count"]}
                 like={item["comment_info"]["digg_count"]}>
-                {
-                    item["reply_infos"] ? (
+                {item["reply_infos"] ? (
                     <JuejinArticleCommentReplyContainer>
                         {item["reply_infos"].map((reply, index) => {
-        
-                            return <JuejinArticleCommentReplyBlock
-                                authorName={reply["user_info"]["user_name"]}
-                                avatarSrc={reply["user_info"]["avatar_large"]}
-                                content={reply["reply_info"]["reply_content"]}
-                                commentTime={getTimeStampDesc(
-                                    reply["reply_info"]["ctime"]
-                                )}
-                                commentCount="评论"
-                                isLastOne={index == item["reply_infos"].length - 1}
-                                like={
-                                    reply["reply_info"]["digg_count"]
-                                }></JuejinArticleCommentReplyBlock>;
+                            return (
+                                <JuejinArticleCommentReplyBlock
+                                    key={reply["reply_id"]}
+                                    authorName={reply["user_info"]["user_name"]}
+                                    avatarSrc={
+                                        reply["user_info"]["avatar_large"]
+                                    }
+                                    content={
+                                        reply["reply_info"]["reply_content"]
+                                    }
+                                    commentTime={getTimeStampDesc(
+                                        reply["reply_info"]["ctime"]
+                                    )}
+                                    commentCount="评论"
+                                    isLastOne={
+                                        index == item["reply_infos"].length - 1
+                                    }
+                                    like={
+                                        reply["reply_info"]["digg_count"]
+                                    }></JuejinArticleCommentReplyBlock>
+                            );
                         })}
                     </JuejinArticleCommentReplyContainer>
                 ) : (
@@ -92,7 +99,8 @@ const JuejinArticleCommentItem = (props) => {
 
     const { isScrollToBottom } = useScrollBottom();
 
-    let getHotCommentInterface = (articleId, listOffset) => {
+    let getHotCommentInterface = (listOffset) => {
+        // console.log('aaaaid',articleId)
         return new Promise((resolve, reject) => {
             getCommentsByArticleId(articleId, listOffset).then(
                 (response) => {
@@ -120,7 +128,7 @@ const JuejinArticleCommentItem = (props) => {
 
     React.useEffect(() => {
         if (isScrollToBottom) {
-            console.log(getCommentsByArticleId(articleId, 10));
+            // console.log(getCommentsByArticleId(articleId, 10));
         }
     }, [isScrollToBottom]);
 

@@ -52,9 +52,10 @@ const JuejinTagList = observer(({ categoryStore }) => {
                 </div>
                 {subCategories &&
                     subCategories.map((item) => {
-                        console.log(item["category_name"]);
+                        // console.log(item["category_name"]);
                         return (
                             <div
+                                key={item["category_id"]}
                                 onClick={() => {
                                     handleClickSubCategory(item["category_id"]);
                                 }}>

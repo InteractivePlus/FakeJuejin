@@ -65,7 +65,7 @@ ArticleViewOtherTab.tabsRole = "Tab";
 const DynamicList = observer((props) => {
     const { dataInterface, categoryStore } = props;
     const currentCategory = categoryStore.getCurrentCategory;
-    console.log("fccc", currentCategory);
+    
     let [listOffset, setListOffset] = React.useState(0);
     let [dynamicList, setDynamicList] = React.useState([]);
     const { isScrollToBottom } = useScrollBottom();
@@ -107,9 +107,9 @@ const DynamicList = observer((props) => {
 
 
     let handleItemClick = async (item) => {
-        console.log(item);
+        // console.log(item);
         historyArticleStore.add(item);
-        console.log(historyArticleStore.historyArticleList);
+        // console.log(historyArticleStore.historyArticleList);
     };
 
     return dynamicList.map((item) => {
@@ -132,7 +132,7 @@ const DynamicList = observer((props) => {
 
         );
     });
-};
+});
 
 // 其实更应该叫ListTabView（？）
 const JuejinArticleList = observer(({ categoryStore }) => {
@@ -167,7 +167,7 @@ const JuejinArticleList = observer(({ categoryStore }) => {
     let getHistoryArticlesInterface = (categoryId, listOffset) => {
         return new Promise((resolve, reject) => {
             const list = historyArticleStore.getData();
-            console.log(list);
+            // console.log(list);
 
             if (list["data"]["articles"].length == 0) {
                 console.log("rere");
@@ -247,7 +247,7 @@ const JuejinArticleList = observer(({ categoryStore }) => {
             </Tabs>
         </JuejinCenterContainer>
     );
-};
+});
 
 JuejinArticleList.getInitialProps = async (ctx) => {
     resetIdCounter();

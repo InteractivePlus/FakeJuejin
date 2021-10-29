@@ -82,7 +82,7 @@ const Nav = observer(({ categoryStore }) => {
         // 获取类别
         getCategories().then(
             (response) => {
-                console.log(response.data);
+                // console.log(response.data);
                 setCategoriesList(response.data["categories"]);
                 categoryStore.setCategoryList(response.data["categories"]);
             },
@@ -143,7 +143,7 @@ const Nav = observer(({ categoryStore }) => {
                                             />
                                         </a>
                                     </div>
-                                    {/* <!-- Primary Navbar items --> */}
+                                    {/* 主导航 */}
                                     <div className="hidden md:flex items-center space-x-1 order-3">
                                         {/* <div className="flex-auto flex items-center ml-3"> */}
                                         <ul className="flex-grow flex text-juejinnav">
@@ -162,7 +162,7 @@ const Nav = observer(({ categoryStore }) => {
                                         {/* </div> */}
                                     </div>
 
-                                    {/* <!-- Mobile menu button --> */}
+                                    {/* 移动端菜单 */}
                                     <div
                                         onClick={() =>
                                             setShowDropdown((b) => !b)
@@ -185,7 +185,7 @@ const Nav = observer(({ categoryStore }) => {
                                     </div>
                                 </div>
 
-                                {/* <!-- Secondary Navbar items --> */}
+                                {/* 次导航 */}
                                 <div className="flex justify-between" >
                                     <div className="flex items-center justify-center ">
                                         <form
@@ -224,12 +224,13 @@ const Nav = observer(({ categoryStore }) => {
                                         {/* 生成一级类别 */}
                                         {categoriesList.map((item, index) => {
                                             return (
-                                                <CategoryTab
-                                                    isSelected={
-                                                        tabIndex == index
-                                                    }>
-                                                    {item["category_name"]}
-                                                </CategoryTab>
+                                                    <CategoryTab
+                                                        key={index}
+                                                        isSelected={
+                                                            tabIndex == index
+                                                        }>
+                                                        {item["category_name"]}
+                                                    </CategoryTab>
                                             );
                                         })}
                                     </div>
@@ -237,7 +238,7 @@ const Nav = observer(({ categoryStore }) => {
                             </TabList>
                             {/* 直接填充空白panel，有空再大改 */}
                             {categoriesList.map((item, index) => {
-                                return <TabPanel></TabPanel>;
+                                return <TabPanel key={index}></TabPanel>;
                             })}
                             {/* <div className="bg-transparent block"> */}
                             {/* <CategoryTabPanel>1</CategoryTabPanel> */}

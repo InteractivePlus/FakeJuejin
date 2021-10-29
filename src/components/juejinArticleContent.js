@@ -5,7 +5,7 @@ import { convertTimeStampToWord } from "../utils/timeUtils";
 const JuejinArticleContentItem = (props) => {
     const { articleFullInfo } = props;
 
-    console.log(articleFullInfo);
+    // console.log(articleFullInfo);
 
     return (
         <div className="flex flex-1 flex-col px-6 pt-3 border-b-2 border-gray-200 w-auto">

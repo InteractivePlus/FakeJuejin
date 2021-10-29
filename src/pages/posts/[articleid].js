@@ -12,12 +12,11 @@ import JuejinCenterContainer from "../../components/juejinCenterContainer";
 import { isEmpty } from "../../utils/commonutils";
 import { getArticles, getArticleById } from "../../api";
 
+import { categoryStore } from "../../store/categoryStore";
 
 export default function Post(props) {
     const router = useRouter();
     const { articleid } = router.query;
-    // let [content, setContent] = React.useState('');
-    // let [authorInfo, setAuthorInfo] = React.useState("");
     let [articleFullInfo, setArticleFullInfo] = React.useState("");
     // console.log(articleid);
 
@@ -26,8 +25,6 @@ export default function Post(props) {
             getArticleById(articleid).then(
                 (response) => {
                     console.log(response.data);
-                    // setContent(response.data["article"]["article_content"]);
-                    // setAuthorInfo(response.data["author_user_info"]);
                     setArticleFullInfo(response.data);
                 },
                 (err) => {}
@@ -37,7 +34,7 @@ export default function Post(props) {
 
     return (
         <div className="font-juejin">
-            <Nav />
+            <Nav categoryStore={categoryStore} />
             <JuejinCenterContainer>
                 {isEmpty(articleFullInfo) ? (
                     <div></div>
@@ -46,7 +43,8 @@ export default function Post(props) {
                         <JuejinArticleContentItem
                             articleFullInfo={articleFullInfo}
                         />
-                        <JuejinArticleCommentItem articleId={articleid}></JuejinArticleCommentItem>
+                        <JuejinArticleCommentItem
+                            articleId={articleid}></JuejinArticleCommentItem>
                     </div>
                 )}
             </JuejinCenterContainer>
