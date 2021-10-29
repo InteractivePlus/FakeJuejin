@@ -42,12 +42,12 @@ export default function Post(props) {
                 {isEmpty(articleFullInfo) ? (
                     <div></div>
                 ) : (
-                    <ul>
+                    <div className="flex flex-col">
                         <JuejinArticleContentItem
                             articleFullInfo={articleFullInfo}
                         />
                         <JuejinArticleCommentItem articleId={articleid}></JuejinArticleCommentItem>
-                    </ul>
+                    </div>
                 )}
             </JuejinCenterContainer>
         </div>

@@ -139,7 +139,7 @@ const JuejinArticleCommentItem = (props) => {
                     </svg>
                 </div>
             </div>
-            <div className="mt-5">
+            <div className="mt-5" style={{flex: '0 0 100%'}}>
                 <DynamicCommentList
                     dataInterface={getHotCommentInterface}></DynamicCommentList>
             </div>
