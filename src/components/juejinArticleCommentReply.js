@@ -1,12 +1,12 @@
 const JuejinArticleCommentReplyBlock = (props) => {
     //获取Props
 
-    const { children, authorName, avatarSrc, content, like, commentCount, commentTime } = props;
+    const { children, authorName, avatarSrc, content, like, commentCount, commentTime, isLastOne=false } = props;
 
 
     return (
 
-        <div className="flex flex-row py-3" style={{ borderBottom: '1px solid #e5e6eb' }}>
+        <div className="flex flex-row py-3" style={isLastOne ? {} : { borderBottom: '1px solid #e5e6eb' }}>
             <div>
                 <div className="flex items-center justify-center space-x-3">
                     <div style={{ width: '24px', height: '24px' }} className="rounded-full border-0 border-base-100 overflow-hidden">

@@ -63,7 +63,8 @@ const DynamicCommentList = (props) => {
                 {
                     item["reply_infos"] ? (
                     <JuejinArticleCommentReplyContainer>
-                        {item["reply_infos"].map((reply) => {
+                        {item["reply_infos"].map((reply, index) => {
+        
                             return <JuejinArticleCommentReplyBlock
                                 authorName={reply["user_info"]["user_name"]}
                                 avatarSrc={reply["user_info"]["avatar_large"]}
@@ -72,6 +73,7 @@ const DynamicCommentList = (props) => {
                                     reply["reply_info"]["ctime"]
                                 )}
                                 commentCount="评论"
+                                isLastOne={index == item["reply_infos"].length - 1}
                                 like={
                                     reply["reply_info"]["digg_count"]
                                 }></JuejinArticleCommentReplyBlock>;

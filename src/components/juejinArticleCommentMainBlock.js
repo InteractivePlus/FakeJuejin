@@ -15,7 +15,7 @@ const JuejinArticleCommentBlock = (props) => {
                 <JuejinRoundAvatar avatarSrc={avatarSrc}></JuejinRoundAvatar>
             </div>
             <div className="flex-col" style={{flex: '0 0 90%'}}>
-                <div className="px-3 divide-x divide-gray-300 flex flex-row " style={{ fontSize: '14px' }}>
+                <div className="px-3 divide-x divide-gray-300 flex flex-row truncate" style={{ fontSize: '14px' }}>
                     <div className="pr-3">{authorName}</div>
                     <div className="px-3 text-juejinnav">{authorJob}</div>
                     <div className="px-3 text-juejinnav">{commentTime}</div>
