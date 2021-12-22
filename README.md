@@ -12,7 +12,16 @@ Tailwind文档：[Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
 
 在线Demo: [Demo](http://101.35.160.228:3000/)
 
-Contributors: 
+# 如何部署
+
+git clone本项目后在文件夹输入
+
+yarn install && yarn run start 
+
+然后访问 **ip:3000** 即可
+
+
+# Contributors
 
 Wey ,
 
