@@ -10,6 +10,8 @@ Tailwind文档：[Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
 
 已在11/11正式对外开源
 
+在线Demo: [Demo](http://101.35.160.228:3000/)
+
 Contributors: 
 
 Wey ,
